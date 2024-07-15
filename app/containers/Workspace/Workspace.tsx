@@ -1,21 +1,17 @@
 /**
  * Workspace
  *
- * Note: in order for sandpack to rebuild on change, we need SandpackPreview
- * to be rendered in the DOM. This is why it is rendered in a hidden div.
  */
 "use client"
 
 import { useState } from 'react';
 
 import { Sandpack } from "@codesandbox/sandpack-react";
-
 import { Select } from "@components";
 
 import { fontSizes, themeDictionary } from "./constants";
 
-export default function Workspace() {
-  // const [codeValue, setCodeValue] = useState<string>('');
+export default function Workspace({ files }: { files: Record<string, string> }) {
   const [fontSize, setFontSize] = useState<string>('14px');
 
   const [selectedTheme, setSelectedTheme] = useState<string>('dracula');
@@ -40,6 +36,7 @@ export default function Workspace() {
         />
       </div>
       <Sandpack
+        files={files}
         template="vanilla"
         theme={{
           ...theme,
@@ -51,10 +48,13 @@ export default function Workspace() {
         options={{
           autoReload: false,
           autorun: false,
+          editorHeight: 400,
           layout: 'tests',
           showInlineErrors: true,
           showLineNumbers: true,
+          showTabs: false,
           showConsole: true,
+          wrapContent: true,
         }}
       />
     </div>

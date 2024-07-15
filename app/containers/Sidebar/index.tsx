@@ -1,13 +1,11 @@
 /**
  * Sidebar
  */
-import { auth } from "@/auth";
 import { ImMenu } from "react-icons/im";
 
 export default async function Sidebar() {
-  const session = await auth();
 
-  return session && (
+  return (
     <section className="drawer bg-neutral h-[calc(100dvh-64px)] w-fit">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
@@ -22,5 +20,5 @@ export default async function Sidebar() {
         </ul>
       </div>
     </section>
-  )
+  );
 }
