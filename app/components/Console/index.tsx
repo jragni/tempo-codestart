@@ -24,6 +24,7 @@ export default function Console({
       logRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [logs]);
+  const adjustedFontSize = `calc(${fontSize}+5px)`;
 
   return (
     <div
@@ -50,7 +51,7 @@ export default function Console({
             <Log
               ref={ref}
               key={key}
-              fontSize={fontSize}
+              fontSize={adjustedFontSize}
               log={log}
             />
           );

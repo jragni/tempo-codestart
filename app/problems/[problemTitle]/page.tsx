@@ -5,7 +5,7 @@ import { Workspace } from "@containers"
 
 
 interface PageProps {
-  params?: { slug: string };
+  params?: { problemTitle: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }
 const initFiles = {
@@ -23,7 +23,8 @@ test('myFunction should log a message', () => {
 }
 
 export default async function ProblemsPage({ params }: PageProps) {
-  const { problemTitle } = params;
+  const { problemTitle } = params ?? {};
+  console.log('problemTitle', problemTitle) // TODO 
 
   return (<Workspace />)
 }
