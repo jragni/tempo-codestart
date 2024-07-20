@@ -23,8 +23,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className}`}>
         <Navbar />
-        <div className="flex w-full pt-[64px]">
-          <Sidebar />
+        <div className="flex w-full pt-[64px] fixed">
+					<Sidebar />
           {children}
         </div>
       </body>

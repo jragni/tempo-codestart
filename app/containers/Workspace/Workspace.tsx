@@ -52,18 +52,6 @@ export default function Workspace() {
             options={fontSizeOptions}
             value={fontSize}
           />
-          <button
-            className="btn btn-primary btn-sm rounded-none"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-          <button
-            className="btn btn-secondary btn-sm rounded-none"
-            onClick={() => setLogs([])}
-          >
-            Clear
-          </button>
         </div>
           <div
             className='[&_.cm-theme]:h-[calc(50vh-64px)]'
@@ -85,6 +73,20 @@ export default function Workspace() {
               width="100%"
               onChange={(editor) => setCodeValue(editor)}
             />
+          </div>
+          <div>
+            <button
+              className="btn btn-primary btn-sm rounded-none"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+            <button
+              className="btn btn-secondary btn-sm rounded-none"
+              onClick={() => setLogs([])}
+            >
+              Clear
+            </button>
           </div>
           <Console fontSize={fontSize} logs={logs} />
       </div>
