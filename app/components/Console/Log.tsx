@@ -25,4 +25,6 @@ const Log = React.forwardRef<HTMLParagraphElement, LogProps>(({ fontSize, log = 
   );
 });
 
+Log.displayName = 'Log';
+
 export default Log;
