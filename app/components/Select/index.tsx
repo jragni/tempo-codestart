@@ -36,7 +36,7 @@ export default function BaseSelect ({
       {options.map(({ label, value: optionValue }: OptionProps) => (
         <Option
           className="text-secondary"
-          key={optionValue}
+          key={`${optionValue}-label-${label}`}
           value={optionValue}
         >
           {label}

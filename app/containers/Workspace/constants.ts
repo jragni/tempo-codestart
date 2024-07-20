@@ -1,43 +1,36 @@
 /**
  * Workspace constants
  */
-import { SandpackTheme } from '@codesandbox/sandpack-react';
-import {
-  amethyst,
-  cobalt2,
-  dracula,
-  ecoLight,
-  gruvboxDark
-} from '@codesandbox/sandpack-themes'
 
-interface ThemeOption {
+import { Extension } from '@uiw/react-codemirror';
+import { darcula } from '@uiw/codemirror-theme-darcula';
+import { githubDark } from '@uiw/codemirror-theme-github';
+import { monokai } from '@uiw/codemirror-theme-monokai';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+
+interface Theme {
   label: string;
-  value: SandpackTheme;
+  theme: Extension;
 }
 
-export const themeDictionary: Record<string, ThemeOption>  = {
-  amethyst: {
-    label: 'Amethyst',
-    value: amethyst,
+export const themeDictionary: Record<string, Theme> = {
+  darcula: {
+    label: 'darcula',
+    theme: darcula,
   },
-  cobalt2: {
-    label: 'Cobalt2',
-    value: cobalt2,
+  githubDark: {
+    label: 'Github (dark)',
+    theme: githubDark,
   },
-  gruvboxDark: {
-    label: 'Gruvbox Dark',
-    value: gruvboxDark,
+  monokai: {
+    label: 'monokai',
+    theme: monokai,
   },
-  dracula: {
-    label: 'Dracula',
-    value: dracula,
+  vscodeDark: {
+    label: 'vscode (dark)',
+    theme: vscodeDark,
   },
-  ecoLight: {
-    label: 'Eco Light',
-    value: ecoLight,
-  },
-};
-
+}
 export const fontSizes: string[] = [
   '12px',
   '13px',
