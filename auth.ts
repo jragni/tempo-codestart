@@ -8,6 +8,5 @@ export const {
   signOut,
   auth,
 } = NextAuth({
-  redirectProxyUrl: process.env.NEXTAUTH_URL,
   providers: [GitHub, Google,],
 });
