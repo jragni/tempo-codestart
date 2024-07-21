@@ -6,7 +6,7 @@ import { ImMenu } from "react-icons/im";
 export default async function Sidebar() {
 
   return (
-  <section className="drawer bg-neutral min-h-[100dvh] w-fit min-w-[47px]">
+  <section className="drawer bg-neutral min-h-[calc(100dvh-64px)] w-fit min-w-[47px]">
     <input id="my-drawer" type="checkbox" className="drawer-toggle" />
     <div className="drawer-content">
       <label htmlFor="my-drawer" className="btn btn-neutral drawer-button w-full">

@@ -29,8 +29,8 @@ export const handleSubmitCode = async (code: string) => {
         "content": code,
       },
     ],
-    "compile_timeout": 10000,
-    "run_timeout": 3000,
+    // "compile_timeout": 30000,
+    // "run_timeout": 9000,
     "compile_memory_limit": -1,
     "run_memory_limit": -1,
     })

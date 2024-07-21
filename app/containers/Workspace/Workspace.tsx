@@ -27,6 +27,7 @@ export default function Workspace() {
 
   const handleSubmit = useCallback(async () => {
     let response = await handleSubmitCode(codeValue);
+    console.log(response)
     setLogs([ ...response.run.output.split('\n')]);
   }, [codeValue]);
 
@@ -34,11 +35,12 @@ export default function Workspace() {
     <div className="flex flex-wrap w-full font-bold bg-base-300">
       {/* Problem section */}
       <div className="min-w-[325px] p-4">
+        {/* TODO swap for actual */}
         <h3 className="text-3xl mb-10">Your First Problem</h3>
         <p className="font-thin">Welcome to Tempo! for your first problem console</p>
       </div>
       {/* Code Section */}
-      <div className="grow h-full flex flex-col">
+      <div className="grow max-h-[100dvh-68px]">
         <div className="w-full">
           <Select
             className="rounded-none select-sm select-accent text-accent"
@@ -53,42 +55,42 @@ export default function Workspace() {
             value={fontSize}
           />
         </div>
-          <div
-            className='[&_.cm-theme]:h-[calc(50vh-64px)]'
-            style={{fontSize}}
+        <div
+          className='[&_.cm-theme]:h-[calc(50vh-64px)]'
+          style={{fontSize}}
+        >
+          <CodeMirror
+            key={`${fontSize}`}
+            value={codeValue}
+            theme={theme}
+            extensions={[
+              javascript(),
+              EditorView.lineWrapping,
+            ]}
+            basicSetup={{
+              autocompletion: true,
+              foldGutter: true,
+            }}
+            height="100%"
+            width="100%"
+            onChange={(editor) => setCodeValue(editor)}
+          />
+        </div>
+        <div className='max-h-[50%]'>
+          <button
+            className="btn btn-primary btn-sm rounded-none"
+            onClick={handleSubmit}
           >
-            <CodeMirror
-              key={`${fontSize}`}
-              value={codeValue}
-              theme={theme}
-              extensions={[
-                javascript(),
-                EditorView.lineWrapping,
-              ]}
-              basicSetup={{
-                autocompletion: true,
-                foldGutter: true,
-              }}
-              height="100%"
-              width="100%"
-              onChange={(editor) => setCodeValue(editor)}
-            />
-          </div>
-          <div>
-            <button
-              className="btn btn-primary btn-sm rounded-none"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
-            <button
-              className="btn btn-secondary btn-sm rounded-none"
-              onClick={() => setLogs([])}
-            >
-              Clear
-            </button>
-          </div>
-          <Console fontSize={fontSize} logs={logs} />
+            Submit
+          </button>
+          <button
+            className="btn btn-secondary btn-sm rounded-none"
+            onClick={() => setLogs([])}
+          >
+            Clear
+          </button>
+        </div>
+        <Console fontSize={fontSize} logs={logs} />
       </div>
     </div>
   );

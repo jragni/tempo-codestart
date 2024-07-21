@@ -15,9 +15,7 @@ const Log = React.forwardRef<HTMLParagraphElement, LogProps>(({ fontSize, log = 
   return (
     <p
       ref={ref}
-      className={`
-        ${log.includes('Error:') ? 'text-error' : ''}
-      `}
+      className={`${log.includes('Error:') ? 'text-error' : ''}`}
       style={{ fontSize }}
     >
       {log}
