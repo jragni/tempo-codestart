@@ -25,7 +25,7 @@ export default function Workspace({
   const [codeValue, setCodeValue] = useState<string>(starterCode);
   const [logs, setLogs] = useState<string[]>([]);
   const [fontSize, setFontSize] = useState<string>('14px');
-  const [selectedTheme, setSelectedTheme] = useState<string>('monokai');
+  const [selectedTheme, setSelectedTheme] = useState<string>('vscodeDark');
 
   const fontSizeOptions = fontSizes.map((fontSize) => ({ label: fontSize, value: fontSize }));
   const themeOptions = Object.entries(themeDictionary).map(([key, { label }]) => ({ label, value: key }));

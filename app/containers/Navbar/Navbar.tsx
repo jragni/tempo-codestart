@@ -7,9 +7,14 @@ import Link from "next/link";
 import { auth } from "@/auth";
 
 import LoginButton from "./AuthButton";
+import { handleUserPostAuth } from "./actions";
 
 export default async function Navbar() {
   const session = await auth();
+
+  if (session) {
+    await handleUserPostAuth(session);
+  }
 
   return (
     <nav

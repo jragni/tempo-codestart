@@ -18,7 +18,6 @@ interface LoginButtonProps {
 
 export default function AuthButton({ session }: LoginButtonProps) {
   const { pending } = useFormStatus();
-
   const signInLabel = pending ? 'Signing in' : 'Sign In';
 
   return (session && session.user) ? (

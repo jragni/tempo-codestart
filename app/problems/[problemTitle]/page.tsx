@@ -2,6 +2,7 @@
  * Problems Page
  */
 import { Sidebar, Workspace } from "@containers"
+import { auth } from '@/auth';
 
 interface PageProps {
   params?: { problemTitle: string };
