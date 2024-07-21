@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
 
-import { Navbar, Sidebar } from "@containers"
+import { Navbar } from "@containers"
 
 const inter = Raleway({
   subsets: ["latin"],
@@ -24,7 +24,6 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <Navbar />
         <div className="flex w-full pt-[64px]">
-					<Sidebar />
           {children}
         </div>
       </body>

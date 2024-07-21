@@ -24,7 +24,6 @@ export default function Console({
       logRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [logs]);
-  const adjustedFontSize = `calc(${fontSize}+5px)`;
 
   return (
     <div
@@ -33,7 +32,7 @@ export default function Console({
         flex
         flex-col
         border-none
-        h-[40vh]
+        h-[44dvh]
         overflow-auto
         resize-none
         rounded-none
@@ -51,7 +50,7 @@ export default function Console({
             <Log
               ref={ref}
               key={key}
-              fontSize={adjustedFontSize}
+              fontSize={fontSize}
               log={log}
             />
           );

@@ -13,9 +13,16 @@ import { Console, Select } from "@components";
 
 import { fontSizes, themeDictionary } from "./constants";
 import { handleSubmitCode } from "./helpers";
+import { WorkspaceProps } from './definitions';
 
-export default function Workspace() {
-  const [codeValue, setCodeValue] = useState<string>('');
+export default function Workspace({
+  problem: {
+    description,
+    starterCode='',
+    title,
+  }
+}: WorkspaceProps) {
+  const [codeValue, setCodeValue] = useState<string>(starterCode);
   const [logs, setLogs] = useState<string[]>([]);
   const [fontSize, setFontSize] = useState<string>('14px');
   const [selectedTheme, setSelectedTheme] = useState<string>('monokai');
@@ -23,10 +30,11 @@ export default function Workspace() {
   const fontSizeOptions = fontSizes.map((fontSize) => ({ label: fontSize, value: fontSize }));
   const themeOptions = Object.entries(themeDictionary).map(([key, { label }]) => ({ label, value: key }));
 
-  const theme = themeDictionary[selectedTheme].theme;
+  const { theme } = themeDictionary[selectedTheme]
 
   const handleSubmit = useCallback(async () => {
     let response = await handleSubmitCode(codeValue);
+    // TODO on submit, we want to save code to db
     console.log(response)
     setLogs([ ...response.run.output.split('\n')]);
   }, [codeValue]);
@@ -34,24 +42,26 @@ export default function Workspace() {
   return (
     <div className="flex flex-wrap w-full font-bold bg-base-300">
       {/* Problem section */}
-      <div className="min-w-[325px] p-4">
+      <div className="min-w-[325px] p-4 max-w-[50%]">
         {/* TODO swap for actual */}
-        <h3 className="text-3xl mb-10">Your First Problem</h3>
-        <p className="font-thin">Welcome to Tempo! for your first problem console</p>
+        <h3 className="text-3xl mb-10">{title}</h3>
+        <p className='whitespace-pre-wrap'>{description}</p>
       </div>
       {/* Code Section */}
-      <div className="grow max-h-[100dvh-68px]">
+      <div className="grow max-h-[100dvh-64px]">
         <div className="w-full">
           <Select
             className="rounded-none select-sm select-accent text-accent"
             onChange={(e) => setSelectedTheme(e.target.value)}
             options={themeOptions}
+            style={{ fontSize }}
             value={selectedTheme}
           />
           <Select
             className="rounded-none select-sm select-accent text-accent"
             onChange={(e) => setFontSize(e.target.value)}
             options={fontSizeOptions}
+            style={{ fontSize }}
             value={fontSize}
           />
         </div>

@@ -2,16 +2,12 @@
  * Workspace constants
  */
 
-import { Extension } from '@uiw/react-codemirror';
 import { darcula } from '@uiw/codemirror-theme-darcula';
 import { githubDark } from '@uiw/codemirror-theme-github';
 import { monokai } from '@uiw/codemirror-theme-monokai';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
-interface Theme {
-  label: string;
-  theme: Extension;
-}
+import { Theme } from './definitions';
 
 export const themeDictionary: Record<string, Theme> = {
   darcula: {
@@ -31,6 +27,7 @@ export const themeDictionary: Record<string, Theme> = {
     theme: vscodeDark,
   },
 }
+
 export const fontSizes: string[] = [
   '12px',
   '13px',
@@ -43,4 +40,7 @@ export const fontSizes: string[] = [
   '20px',
   '21px',
   '22px',
+  '23px',
+  '24px',
+  '25px',
 ];
