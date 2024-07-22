@@ -13,7 +13,7 @@ export default function ProblemNotFound() {
       <Link
         className="btn btn-info btn-outline mt-4"
         href="/"
-      >Let's go back home</Link>
+      >{`Let's go back home`}</Link>
     </div>
   );
 }
