@@ -18,7 +18,7 @@ import { WorkspaceProps } from './definitions';
 export default function Workspace({
   problem: {
     description,
-    starterCode='',
+    starterCode,
     title,
   }
 }: WorkspaceProps) {
@@ -37,15 +37,17 @@ export default function Workspace({
     // TODO on submit, we want to save code to db
     console.log(response)
     setLogs([ ...response.run.output.split('\n')]);
+
   }, [codeValue]);
 
   return (
     <div className="flex flex-wrap w-full font-bold bg-base-300">
       {/* Problem section */}
-      <div className="min-w-[325px] p-4 max-w-[50%]">
-        {/* TODO swap for actual */}
+      <div className="min-w-[325px] p-4 max-w-[30%] mb-4">
         <h3 className="text-3xl mb-10">{title}</h3>
-        <p className='whitespace-pre-wrap'>{description}</p>
+        <p className='text-sm md:text-lg whitespace-pre-line'>
+          {description.split('\\n').join('\n\n')}
+        </p>
       </div>
       {/* Code Section */}
       <div className="grow max-h-[100dvh-64px]">

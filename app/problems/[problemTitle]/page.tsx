@@ -1,27 +1,33 @@
 /**
  * Problems Page
+ *
+ * // TODO redirect if problem not found
  */
 import { Sidebar, Workspace } from "@containers"
 import { auth } from '@/auth';
+import { getProblemByTitle } from "@/app/api/problems/handlers";
+import { convertSlugToProblemTitle } from "../helpers";
+import { redirect } from "next/navigation";
+import { Problem } from "@/app/containers/Workspace/definitions";
 
 interface PageProps {
   params?: { problemTitle: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }
-const problem = {
-  description: 'Welcome to Tempo! for your first problem console log "Hello, World!"\n\n In order to run the code, press the submit button. This will also save your progress',
-  starterCode: `console.log("Hello, World!");`,
-  testCode: `
-test('myFunction should log a message', () => {
-  const consoleLogSpy = jest.spyOn(console, 'log');
-  expect(consoleLogSpy).toHaveBeenCalledWith("Hello, World!");
-  consoleLogSpy.mockRestore(); // Clean up the spy after the test
-});`,
-  title: 'Your First Problem'
-};
 
 export default async function ProblemsPage({ params }: PageProps) {
-  const { problemTitle } = params ?? {};
+  const { problemTitle } = params ?? { problemTitle: ''};
+
+  const session = await auth();
+  // TODO create a fetch for userProblems
+  // TODO create a fetchh for Sidebar problems
+  // TODO create favorites button for sidebar
+
+  const title = convertSlugToProblemTitle(problemTitle)
+  const problem = await getProblemByTitle(title) as Problem;
+  console.log(problem)
+
+  if(!problem) redirect('/not-found');
 
   return (
   <>

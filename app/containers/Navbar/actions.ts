@@ -1,7 +1,7 @@
 "use server"
 import { Session } from "next-auth";
 import { signIn, signOut } from "@/auth";
-import { createUser, getUser } from "app/api/users/[email]/handlers"
+import { createUser, getUser } from "app/api/users/handlers";
 
 
 /**
