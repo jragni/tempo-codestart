@@ -2,6 +2,7 @@
 import { Session } from "next-auth";
 import { signIn, signOut } from "@/auth";
 import { createUser, getUser } from "app/api/users/handlers";
+import { camelCaseData } from "@/utils/globalHelpers";
 
 
 /**
@@ -22,14 +23,15 @@ export async function handleSignOut() {
 export async function handleUserPostAuth(session: Session) {
   // !NOTE this shouldn't be possible
   const email = session.user?.email || '';
-  const user = await getUser(email);
+  let user = await getUser(email);
   if (!user) {
     // create user
-    await createUser({
+    user = await createUser({
       email: session?.user?.email ?? '',
       name: session?.user?.name ?? '',
       image: session?.user?.image ?? '',
       isAdmin: false
     });
   }
+  return camelCaseData(user);
 }

@@ -8,6 +8,7 @@ export interface Problem {
   starterCode: string;
   testCode: string;
   title: string;
+  topic?: string;
 }
 
 export interface WorkspaceProps {
