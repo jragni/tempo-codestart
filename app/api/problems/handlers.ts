@@ -24,7 +24,6 @@ export async function getProblemBySlug(slug: string) {
 
 interface CreateProblem {
   description: string;
-  id: string | number;
   slug: string;
   starterCode: string;
   testCode: string;
