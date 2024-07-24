@@ -32,7 +32,7 @@ export default function Console({
         flex
         flex-col
         border-none
-        h-[44dvh]
+        h-[50dvh]
         overflow-auto
         resize-none
         rounded-none

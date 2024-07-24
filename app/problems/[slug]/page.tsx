@@ -18,7 +18,6 @@ export default async function ProblemsPage({ params }: PageProps) {
 
   const session = await auth();
   // TODO create a fetch for userProblems
-  // TODO create a fetchh for Sidebar problems
   // TODO create favorites button for sidebar
 
   const problem = await getProblemBySlug(slug) as Problem;

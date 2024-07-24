@@ -31,12 +31,21 @@ export default function ClientSidebar({ problems, user }: ClientSidebarProps) {
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
         <Menu className="menu bg-neutral text-base-content grow min-h-screen w-80 p-4">
           {topicsList.map(topic => (
-            <Menu.Details className='text-lg font-bold' label={topic} key={`${topic}-sidebar-menu-problems`}>
-              {problems.sort().filter(problem => problem.topic === topic.toLowerCase()).map(problem => (
-                <Menu.Item  className='text-md font-thin' key={`${problem.slug}-menu-item`}>
-                  <Link href={`/problems/${problem.slug}`} key={problem.slug}>
-                    {problem.title}
-                  </Link>
+            <Menu.Details
+              key={`${topic}-sidebar-menu-problems`}
+              label={<span className="text-xl font-bold">{topic}</span>}
+            >
+              {problems.sort((a, b) => Number(a.id) - Number(b.id))
+                .filter(problem => problem.topic === topic.toLowerCase())
+                .map(problem => (
+                  <Menu.Item  key={`${problem.slug}-menu-item`}>
+                    <Link
+                      className='text-lg font-thin'
+                      href={`/problems/${problem.slug}`}
+                      key={problem.slug}
+                    >
+                      {problem.title}
+                    </Link>
                 </Menu.Item>
               ))}
             </Menu.Details>
