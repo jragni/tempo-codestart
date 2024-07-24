@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { EditorView  } from '@uiw/react-codemirror';
 import CodeMirror from '@uiw/react-codemirror';
+import { GrPowerReset } from "react-icons/gr";
 import { javascript } from '@codemirror/lang-javascript';
 
 import { Console, Select } from "@components";
@@ -32,10 +33,15 @@ export default function Workspace({
 
   const { theme } = themeDictionary[selectedTheme]
 
+  const handleReset = () => {
+    setCodeValue(starterCode);
+    setLogs([])
+  }
+
   const handleSubmit = useCallback(async () => {
     let response = await handleSubmitCode(codeValue);
     // TODO on submit, we want to save code to db
-		// TODO add solution
+    // TODO add solution
     setLogs([ ...response.run.output.split('\n')]);
 
   }, [codeValue]);
@@ -51,7 +57,7 @@ export default function Workspace({
       </div>
       {/* Code Section */}
       <div className="grow max-h-[100dvh-64px]">
-        <div className="w-full">
+        <div className="w-full flex align-center">
           <Select
             className="rounded-none select-sm select-accent text-accent"
             onChange={(e) => setSelectedTheme(e.target.value)}
@@ -88,7 +94,7 @@ export default function Workspace({
             onChange={(editor) => setCodeValue(editor)}
           />
         </div>
-        <div className='max-h-[50%]'>
+        <div className='max-h-[50%] flex align-center'>
           <button
             className="btn btn-primary btn-sm rounded-none"
             onClick={handleSubmit}
@@ -99,7 +105,13 @@ export default function Workspace({
             className="btn btn-secondary btn-sm rounded-none"
             onClick={() => setLogs([])}
           >
-            Clear
+            Clear Console
+          </button>
+          <button
+            className="btn btn-warning btn-sm rounded-none"
+            onClick={handleReset}
+          >
+            <GrPowerReset size={16} />
           </button>
         </div>
         <Console fontSize={fontSize} logs={logs} />
