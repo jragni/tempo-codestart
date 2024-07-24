@@ -1,5 +1,6 @@
 CREATE TABLE problems (
  description TEXT,
+  id int,
   starter_code TEXT,
   test_code TEXT,
   title VARCHAR(255) PRIMARY KEY,

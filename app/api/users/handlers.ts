@@ -1,4 +1,6 @@
 import { sql } from '@vercel/postgres';
+import { User } from '@/app/definitions';
+
 import { camelCaseData } from '../../../utils/globalHelpers';
 
 /** GET */
@@ -13,12 +15,6 @@ export async function getUser(email: string) {
 }
 
 /** POST */
-interface User {
-  email: string;
-  name: string;
-  image?: string;
-  isAdmin?: boolean;
-}
 
 export async function createUser({
   email,

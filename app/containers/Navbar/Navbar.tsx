@@ -4,21 +4,13 @@
 
 import Link from "next/link";
 
-import { auth } from "@/auth";
-
 import LoginButton from "./AuthButton";
-import { handleUserPostAuth } from "./actions";
+import { User } from "@/app/definitions";
+interface NavbarProps {
+  user: User | null;
+};
 
-export default async function Navbar() {
-  const session = await auth();
-  let user;
-  if (session) {
-    // NOTE: the user from session is not the same as the user from the database
-    user = await handleUserPostAuth(session);
-  }
-
-	const showAdminLink = user && user.isAdmin;
-
+export default async function Navbar({ user }: NavbarProps) {
   return (
     <nav
       className="
@@ -36,9 +28,9 @@ export default async function Navbar() {
         </Link>
       </div>
       <div>
-        {showAdminLink && <Link className="btn btn-base-200" href="/admin">Admin</Link>}
+        {user && user.isAdmin && <Link className="btn btn-base-200" href="/admin">Admin</Link>}
         <form className="flex-none">
-          <LoginButton session={session} />
+          <LoginButton user={user} />
         </form>
       </div>
     </nav>

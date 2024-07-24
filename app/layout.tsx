@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
 
-import { Navbar } from "@containers"
+import { auth } from "@/auth";
+import { Navbar, Sidebar } from "@containers"
+import { User } from "@/app/definitions";
+
+import { handleUserPostAuth } from "./actions";
 
 const inter = Raleway({
   subsets: ["latin"],
@@ -14,16 +18,21 @@ export const metadata: Metadata = {
   description: "Prepare for your coding bootcamp with Tempo Codestart",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await auth();
+  let user = session ?  await handleUserPostAuth(session) as User : null;
+
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
-        <Navbar />
+        <Navbar user={user} />
         <div className="flex w-full pt-[64px]">
+          <Sidebar user={user} />
           {children}
         </div>
       </body>

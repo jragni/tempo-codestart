@@ -5,6 +5,8 @@ import { Extension } from '@uiw/react-codemirror';
 
 export interface Problem {
   description: string;
+  id?: number | string;
+  slug: string;
   starterCode: string;
   testCode: string;
   title: string;

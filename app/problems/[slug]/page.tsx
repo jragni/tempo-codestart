@@ -2,7 +2,7 @@
  * Problems Page
  *
  */
-import { Sidebar, Workspace } from "@containers"
+import { Workspace } from "@containers"
 import { auth } from '@/auth';
 import { getProblemBySlug } from "@/app/api/problems/handlers";
 import { redirect } from "next/navigation";
@@ -23,12 +23,10 @@ export default async function ProblemsPage({ params }: PageProps) {
 
   const problem = await getProblemBySlug(slug) as Problem;
 
-	console.log(problem)
   if(!problem) redirect('/not-found');
 
   return (
   <>
-    <Sidebar />
     <Workspace problem={problem} />
   </>
   )

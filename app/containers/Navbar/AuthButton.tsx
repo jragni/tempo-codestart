@@ -11,27 +11,28 @@ import { FaGithub } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 
 import { handleSignIn, handleSignOut } from "./actions";
+import { User } from "@/app/definitions";
 
 interface LoginButtonProps {
-  session: Session | null,
+	user?: User | null,
 };
 
-export default function AuthButton({ session }: LoginButtonProps) {
+export default function AuthButton({ user }: LoginButtonProps) {
   const { pending } = useFormStatus();
   const signInLabel = pending ? 'Signing in' : 'Sign In';
 
-  return (session && session.user) ? (
+  return (user) ? (
     <button
       className="btn btn-ghost"
       formAction={handleSignOut}
       type="submit"
     >
-      {session.user.image
+      {user.image
         ? (
           <Image
             className="rounded-full"
             height={30}
-            src={session.user.image} alt="user image"
+            src={user.image} alt="user image"
             width={30}
           />
         ) : <FaRegUser />
