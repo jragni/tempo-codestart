@@ -2,6 +2,7 @@
  * workspace definitions
  */
 import { Extension } from '@uiw/react-codemirror';
+import { User } from '@/app/definitions';
 
 export interface Problem {
   description: string;
@@ -13,12 +14,19 @@ export interface Problem {
   topic?: string;
 }
 
-export interface WorkspaceProps {
-  isLoggedIn: boolean;
-  problem: Problem;
-}
-
 export interface Theme {
   label: string;
   theme: Extension;
+}
+
+export interface UpdateUserCode {
+  email: string;
+  problemTitle: string;
+  userCode: string;
+}
+
+export interface WorkspaceProps {
+  isLoggedIn: boolean;
+  problem: Problem;
+  user: User;
 }

@@ -6,6 +6,8 @@ import { auth } from "@/auth";
 import { AdminPage as Admin }from '@containers';
 
 import { getUser } from "../api/users/handlers";
+import { getProblems } from "../api/problems/handlers";
+import { Problem } from "../containers/Workspace/definitions";
 
 export default async function AdminPage() {
   const session = await auth();
@@ -14,14 +16,14 @@ export default async function AdminPage() {
   if (!session || !session.user || !email) redirect("/not-found");
 
   const user = await getUser(email);
-  console.log(user);
+  const problems = await getProblems() as Problem[];
 
-  if (!user.isAdmin) {
+  if (!user?.isAdmin) {
     // redirect to
     redirect("/not-found");
   }
 
   return (
-    <Admin />
+    <Admin problems={problems} />
   );
 }

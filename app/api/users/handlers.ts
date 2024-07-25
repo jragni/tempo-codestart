@@ -9,7 +9,8 @@ export async function getUsers(email: string) {
   return result.rows[0];
 }
 
-export async function getUser(email: string) {
+export async function getUser(email: string | null) {
+  if (!email) return null;
   const result = await sql`SELECT * FROM Users WHERE email = ${email}`;
   return camelCaseData(result.rows[0]);
 }

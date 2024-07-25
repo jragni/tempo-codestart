@@ -1,3 +1,6 @@
+import { updateUserProblemCode } from "@/app/api/userproblems/handlers";
+import { UpdateUserCode } from "./definitions";
+
 const test = `
 test('myFunction should log a message', () => {
 const consoleLogSpy = jest.spyOn(console, 'log');
@@ -5,8 +8,16 @@ const consoleLogSpy = jest.spyOn(console, 'log');
   consoleLogSpy.mockRestore(); // Clean up the spy after the test
 });`;
 
+export const handleUpdateUserCode = async ({
+  email,
+  problemTitle,
+  userCode,
+}: UpdateUserCode) => {
+  const response = await updateUserProblemCode({ email, problemTitle, userCode });
+  return response;
+}
 
-export const handleSubmitCode = async (code: string) => {
+export const handleSubmitCode = async (code: string, email: string, title: string,) => {
 
   const response = await fetch("https://emkc.org/api/v2/piston/execute", {
     method: "POST",
@@ -32,6 +43,17 @@ export const handleSubmitCode = async (code: string) => {
     "compile_memory_limit": -1,
     "run_memory_limit": -1,
     })
-  })
-  return await response.json()
+  });
+
+  const respData = await response.json();
+
+  if (!!email) {
+    await handleUpdateUserCode({
+      email: email,
+      problemTitle: title,
+      userCode: code,
+    });
+  }
+
+  return respData;
 };

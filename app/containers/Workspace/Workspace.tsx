@@ -13,17 +13,19 @@ import { javascript } from '@codemirror/lang-javascript';
 import { Console, Select } from "@components";
 
 import { fontSizes, themeDictionary } from "./constants";
-import { handleSubmitCode } from "./helpers";
+import { handleSubmitCode, handleUpdateUserCode } from "./helpers";
 import { WorkspaceProps } from './definitions';
 
 export default function Workspace({
   isLoggedIn,
+  problem,
   problem: {
     description,
     slug,
     starterCode,
     title,
-  }
+  },
+  user,
 }: WorkspaceProps) {
   const [codeValue, setCodeValue] = useState<string>(starterCode);
   const [logs, setLogs] = useState<string[]>([]);
@@ -41,10 +43,13 @@ export default function Workspace({
   }
 
   const handleSubmit = useCallback(async () => {
-    let response = await handleSubmitCode(codeValue);
-    // TODO on submit, we want to save code to db
-    // TODO add solution
+    // Set last viewed problem in local storage
     localStorage.setItem('last_viewed_problem_slug', slug);
+
+
+    let response = await handleSubmitCode(codeValue, user.email, title);
+    // TODO add solution
+
     setLogs([ ...response.run.output.split('\n')]);
 
   }, [codeValue]);

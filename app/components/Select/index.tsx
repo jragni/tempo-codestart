@@ -10,7 +10,7 @@ interface BaseSelectProps {
   className?: string;
   onChange: ChangeEventHandler<HTMLSelectElement>
   options: OptionProps[];
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   value: string;
 };
 

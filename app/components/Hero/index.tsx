@@ -1,10 +1,8 @@
 /***
  * Hero component
  */
-import Image from 'next/image';
 import Link from 'next/link'
 import HeroImage from 'public/hero-coding-image.jpeg';
-import CodeImage from 'public/laptop-hero-image.jpeg';
 
 export default function Hero() {
   // TODO update this link depending on the last problem user in session solved

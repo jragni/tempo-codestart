@@ -41,10 +41,34 @@ export async function createProblem({
 }: CreateProblem) {
   const nextIdData = await sql`SELECT MAX(id) FROM problems`;
   const nextId = Number(nextIdData.rows[0].max) + 1;
-  console.log(typeof nextId, nextId);
+
   const result = await sql`
    INSERT INTO problems (description, id, slug, starter_code, test_code, title, topic)
     VALUES (${description}, ${nextId}, ${slug}, ${starterCode}, ${testCode}, ${title}, ${topic})
+    RETURNING *;
+  `
+  return result.rows[0];
+}
+
+/** PUT */
+
+export async function updateProblem({
+  description,
+  slug,
+  starterCode,
+  testCode,
+  title,
+  topic,
+}: CreateProblem) {
+  const result = await sql`
+    UPDATE problems
+    SET description = ${description},
+    slug = ${slug},
+    starter_code = ${starterCode},
+    test_code = ${testCode},
+    title = ${title},
+    topic = ${topic}
+    WHERE title = ${title}
     RETURNING *;
   `
   return result.rows[0];
