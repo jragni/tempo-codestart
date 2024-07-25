@@ -11,6 +11,7 @@ interface NavbarProps {
 };
 
 export default async function Navbar({ user }: NavbarProps) {
+	// TODO  add redirect of logo link to dashboard (after login and dashboard created)
   return (
     <nav
       className="

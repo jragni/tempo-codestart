@@ -3,8 +3,8 @@
  * LoginModal component
  */
 // TODO add google sign in
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Session } from "next-auth";
 import { useFormStatus } from "react-dom";
 
 import { FaGithub } from "react-icons/fa";
@@ -19,7 +19,18 @@ interface LoginButtonProps {
 
 export default function AuthButton({ user }: LoginButtonProps) {
   const { pending } = useFormStatus();
+  const [error, setError] = useState<null | string>(null);
   const signInLabel = pending ? 'Signing in' : 'Sign In';
+
+  const handleFormAction = async () => {
+    try {
+      const slug = localStorage.getItem('last_viewed_problem_slug')
+        || 'your-first-problem';
+      await handleSignIn('github', `/problems/${slug}`);
+    } catch (e) {
+      setError('An error occurred. Please try again.');
+    }
+  }
 
   return (user) ? (
     <button
@@ -40,14 +51,21 @@ export default function AuthButton({ user }: LoginButtonProps) {
       Sign Out
     </button>
     ) : (
-    <button
-      className="btn btn-outline"
-      formAction={() => handleSignIn('github')}
-      type="submit"
-    >
-      <FaGithub />
-      {signInLabel}
-      {pending && <span className="loading loading-bars"></span>}
-    </button>
+    <div>
+      <button
+        className={`
+          btn
+          btn-outline
+          ${!!error && 'btn-error'}
+        `}
+        formAction={handleFormAction}
+        type="submit"
+      >
+        <FaGithub />
+        {signInLabel}
+        {pending && <span className="loading loading-bars"></span>}
+      </button>
+      <p className="text-center text-xs text-error">{error}</p>
+    </div>
   );
 }

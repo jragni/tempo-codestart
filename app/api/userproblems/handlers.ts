@@ -24,6 +24,16 @@ export async function getUserProblem(
   return camelCaseData(result.rows[0]);
 }
 
+export async function getMostRecentUserProblems(email: string) {
+  const result = await sql`
+    SELECT problem_title from user_problem
+    where user_email='jhensenrayagni@gmail.com'
+    ORDER BY last_attempted_at
+    limit 1
+  `;
+  return result.rows[0];
+}
+
 /** POST */
 interface CreateUserProblemParams {
   email: string;

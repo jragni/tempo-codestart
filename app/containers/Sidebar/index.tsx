@@ -15,6 +15,5 @@ interface SidebarProps {
 export default async function Sidebar({ user }: SidebarProps) {
   const problems = await getProblems() as Problem[];
 
-  console.log('probleems: ', problems);
   return <ClientSidebar problems={problems} user={user} />;
 }

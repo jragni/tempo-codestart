@@ -20,6 +20,7 @@ export default function Workspace({
   isLoggedIn,
   problem: {
     description,
+    slug,
     starterCode,
     title,
   }
@@ -43,6 +44,7 @@ export default function Workspace({
     let response = await handleSubmitCode(codeValue);
     // TODO on submit, we want to save code to db
     // TODO add solution
+    localStorage.setItem('last_viewed_problem_slug', slug);
     setLogs([ ...response.run.output.split('\n')]);
 
   }, [codeValue]);
