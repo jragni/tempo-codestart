@@ -18,16 +18,17 @@ import { WorkspaceProps } from './definitions';
 
 export default function Workspace({
   isLoggedIn,
-  problem,
   problem: {
     description,
+		id: problemId,
     slug,
     starterCode,
     title,
   },
   user,
+  userProblem,
 }: WorkspaceProps) {
-  const [codeValue, setCodeValue] = useState<string>(starterCode);
+  const [codeValue, setCodeValue] = useState<string>(userProblem && userProblem.userCode ? userProblem.userCode : starterCode);
   const [logs, setLogs] = useState<string[]>([]);
   const [fontSize, setFontSize] = useState<string>('14px');
   const [selectedTheme, setSelectedTheme] = useState<string>('vscodeDark');
@@ -47,10 +48,15 @@ export default function Workspace({
     localStorage.setItem('last_viewed_problem_slug', slug);
 
 
-    let response = await handleSubmitCode(codeValue, user.email, title);
-    // TODO add solution
-
-    setLogs([ ...response.run.output.split('\n')]);
+    let response = await handleSubmitCode(codeValue);
+    if (user) {
+      await handleUpdateUserCode({
+        email: user.email,
+        problemId,
+        userCode: codeValue,
+      });
+    }
+      setLogs([ ...response.run.output.split('\n')]);
 
   }, [codeValue]);
 

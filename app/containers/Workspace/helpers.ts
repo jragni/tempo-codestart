@@ -10,14 +10,14 @@ const consoleLogSpy = jest.spyOn(console, 'log');
 
 export const handleUpdateUserCode = async ({
   email,
-  problemTitle,
+  problemId,
   userCode,
 }: UpdateUserCode) => {
-  const response = await updateUserProblemCode({ email, problemTitle, userCode });
+  const response = await updateUserProblemCode({ email, problemId, userCode });
   return response;
 }
 
-export const handleSubmitCode = async (code: string, email: string, title: string,) => {
+export const handleSubmitCode = async (code: string) => {
 
   const response = await fetch("https://emkc.org/api/v2/piston/execute", {
     method: "POST",
@@ -47,13 +47,13 @@ export const handleSubmitCode = async (code: string, email: string, title: strin
 
   const respData = await response.json();
 
-  if (!!email) {
-    await handleUpdateUserCode({
-      email: email,
-      problemTitle: title,
-      userCode: code,
-    });
-  }
+  // if (!!email) {
+  //   await handleUpdateUserCode({
+  //     email: email,
+  //     problemTitle: title,
+  //     userCode: code,
+  //   });
+  // }
 
   return respData;
 };

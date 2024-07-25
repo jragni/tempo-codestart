@@ -16,7 +16,7 @@ export default async function AdminPage() {
   if (!session || !session.user || !email) redirect("/not-found");
 
   const user = await getUser(email);
-  const problems = await getProblems() as Problem[];
+  const problems = await getProblems() as Problem[] || [];
 
   if (!user?.isAdmin) {
     // redirect to

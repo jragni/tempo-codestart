@@ -12,6 +12,7 @@ export function snakeToCamelCase(str: string) {
 }
 
 export function camelCaseData(object: Record<string, any>) {
+  if (!object) return null;
   return Object.keys(object).reduce((acc: Record<string,any>, key) => {
     const newKey = snakeToCamelCase(key);
     acc[newKey] = object[key];

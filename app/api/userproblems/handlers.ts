@@ -2,6 +2,7 @@
 /** user problem handlers */
 import { camelCaseData } from '@/utils/globalHelpers';
 import { sql } from '@vercel/postgres';
+import { UserProblem } from '@/app/definitions';
 
 /**
  * GET
@@ -17,38 +18,31 @@ export async function getUserProblems(email: string) {
 
 export async function getUserProblem(
   email: string,
-  problemTitle: string,
+  problemId: string,
 ) {
   const result = await sql`
     SELECT * FROM user_problem
     WHERE user_email = ${email}
-    AND problem_title = ${problemTitle}
+    AND problem_id = ${problemId}
   `;
 
-  return result.rows[0];
+  return camelCaseData(result.rows[0]);
 }
 
 /**
  * POST
  */
-interface CreateUserProblemParams {
-  email: string;
-  problemTitle: string;
-  userCode?: string;
-  userFavorite?: boolean;
-  isSolved?: boolean;
-}
 
 export async function createUserProblem({
   email,
-  problemTitle,
+  problemId,
   userCode = '',
   userFavorite = false,
   isSolved = false,
-}: CreateUserProblemParams) {
+}: UserProblem) {
   const result = await sql`
-    INSERT INTO user_problem (user_email, problem_title, user_code, user_favorite, is_solved)
-    VALUES (${email}, ${problemTitle}, ${userCode}, ${userFavorite}, ${isSolved})
+    INSERT INTO user_problem (user_email, problem_id, user_code, user_favorite, is_solved)
+    VALUES (${email}, ${problemId}, ${userCode}, ${userFavorite}, ${isSolved})
     RETURNING *;
   `;
   return result.rows[0];
@@ -60,15 +54,15 @@ export async function createUserProblem({
 
 export async function updateUserProblemCode({
   email,
-  problemTitle,
+  problemId,
   userCode,
-}: CreateUserProblemParams) {
+}: UserProblem) {
 
   const result = await sql`
     UPDATE user_problem
     SET user_code = ${userCode}
     WHERE user_email = ${email}
-    AND problem_title = ${problemTitle}
+    AND problem_id = ${problemId}
     RETURNING *;
   `;
   return result.rows[0];

@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { Problem } from "@/app/containers/Workspace/definitions";
 import { getUser } from "@/app/api/users/handlers";
 import { createUserProblem, getUserProblem } from "@/app/api/userproblems/handlers";
-import { User } from "@/app/definitions";
+import { User, UserProblem } from "@/app/definitions";
 
 interface PageProps {
   params?: { slug: string };
@@ -24,30 +24,27 @@ export default async function ProblemsPage({ params }: PageProps) {
   const session = await auth() as { user: { email: string } };
 
   const problem = await getProblemBySlug(slug) as Problem;
+  if(!problem) redirect('/not-found');
 
   if (session && session.user) {
     user = await getUser(session.user.email) as User;
-    userProblem = await getUserProblem(user.email, problem.title)
+    userProblem = await getUserProblem(user.email, problem.id) as UserProblem
     if(!userProblem) {
       await createUserProblem({
         email: user.email,
-        problemTitle: problem.title,
+        problemId: problem.id,
         userCode: '',
         userFavorite: false,
         isSolved: false
       })
-    } else {
-    // If user has attempted this problem before, use their code
-      problem.starterCode = userProblem?.starterCode || problem.starterCode;
     }
 
   }
 
-  if(!problem) redirect('/not-found');
 
   return (
   <>
-    <Workspace isLoggedIn={!!session} problem={problem} user={user} />
+    <Workspace isLoggedIn={!!session} problem={problem} user={user} userProblem={userProblem} />
   </>
   )
 }

@@ -1,12 +1,13 @@
 
 export interface Fields {
-  component: string
-  id: string,
-  label: string,
-  name: string
+  component: string;
+  hidden?: boolean;
+  id: string;
+  label: string;
+  name: string;
   required: boolean;
-  sublabel?: string
-  type: string,
+  sublabel?: string;
+  type: string;
 }
 
 export interface FormProps {

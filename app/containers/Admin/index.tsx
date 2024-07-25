@@ -28,8 +28,7 @@ export default function AdminPage({ problems }: { problems: Problem[] }) {
       />
       {form === 'edit-problem' && (
         <Select
-          onChange={(e) => setSelectedProblem(problems.find(({ title }) => title === e.target.value)
-          || selectedProblem)}
+          onChange={(e) => setSelectedProblem(problems.filter(({ title }) => title === e.target.value)[0])}
           className="w-full max-w-lg"
           options={problems.map(({ title }) => ({ label: title, value: title }))}
           value={selectedProblem?.title}
@@ -51,6 +50,7 @@ export default function AdminPage({ problems }: { problems: Problem[] }) {
       >
         {formProps.fields.map(({
           component,
+					hidden=false,
           id,
           label,
           name,
@@ -58,7 +58,7 @@ export default function AdminPage({ problems }: { problems: Problem[] }) {
           sublabel,
           type,
         }: Fields) => (
-          <div key={`${label}-id-${id}-${name}-${component}`}>
+          <div hidden={hidden} key={`${label}-id-${id}-${name}-${component}`}>
             <label htmlFor={id}>{label}</label>
             {sublabel && <p>{sublabel}</p>}
             {component === 'textarea' ? (
@@ -67,16 +67,18 @@ export default function AdminPage({ problems }: { problems: Problem[] }) {
                 id={id}
                 name={name}
                 required={required}
-                defaultValue={form === 'edit-problem' ? selectedProblem[name as keyof Problem] as string : ''}
+                defaultValue={form === 'edit-problem' && problems.length && selectedProblem ? selectedProblem[name as keyof Problem] as string : ''}
+								hidden={hidden}
               />
             ) : (
               <input
                 className="input input-bordered w-full max-w-lg"
                 type={type}
+								hidden={hidden}
                 id={id}
                 name={name}
                 required={required}
-                defaultValue={form === 'edit-problem' ? selectedProblem[name as keyof Problem] as string : ''}
+                defaultValue={form === 'edit-problem' && problems.length  && selectedProblem ? selectedProblem[name as keyof Problem] as string : ''}
               />
             )}
           </div>

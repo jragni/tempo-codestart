@@ -47,6 +47,14 @@ export const formPropDictionary: Record<string, FormProps> = {
       },
       {
         component: "textarea",
+        id: "solution",
+        label: "Solution",
+        name: "solution",
+        required: false,
+        type: "text",
+      },
+      {
+        component: "textarea",
         id: "testCode",
         label: "Test Code",
         name: "testCode",
@@ -65,8 +73,8 @@ export const formPropDictionary: Record<string, FormProps> = {
   },
   "edit-problem": {
     action: async (formData: FormData) => await handleUpdateProblem(formData),
-    title: "Create Problem",
-    submitText: "Create Problem",
+    title: "Edit Problem",
+    submitText: "Submit Edit",
     fields: [
       {
         component: "input",
@@ -82,7 +90,7 @@ export const formPropDictionary: Record<string, FormProps> = {
         id: "title",
         label: "Title",
         name: "title",
-        required: true,
+        required: false,
         type: "text",
       },
       {
@@ -110,6 +118,14 @@ export const formPropDictionary: Record<string, FormProps> = {
         required: false,
       },
       {
+        component: "textarea",
+        id: "solution",
+        label: "Solution",
+        name: "solution",
+        required: false,
+        type: "text",
+      },
+      {
         component: "input",
         id: "topic",
         label: "Topic",
@@ -117,6 +133,15 @@ export const formPropDictionary: Record<string, FormProps> = {
         required: false,
         type: "text",
       },
+      {
+        component: "input",
+        hidden: true,
+        id: "id",
+        label: "id",
+        name: "id",
+        required: true,
+        type: "text",
+      }
     ],
   }
 };

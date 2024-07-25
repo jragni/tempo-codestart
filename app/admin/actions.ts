@@ -2,7 +2,7 @@
  * admin actions
  */
 "use server";
-import { FormEventHandler } from "react";
+import { revalidatePath } from "next/cache";
 import { createProblem, updateProblem } from "../api/problems/handlers";
 
 export const handleCreateProblem = async (formData: FormData) => {
@@ -10,6 +10,7 @@ export const handleCreateProblem = async (formData: FormData) => {
     const problem = await createProblem({
       description: formData.get("description") as string,
       slug: formData.get("slug") as string,
+      solution: formData.get("solution") as string,
       starterCode: formData.get("starterCode") as string,
       testCode: formData.get("testCode") as string,
       title: formData.get("title") as string,
@@ -20,21 +21,29 @@ export const handleCreateProblem = async (formData: FormData) => {
     console.log("Error creating problem=========");
     console.error(e);
   }
+  revalidatePath("/admin");
+  revalidatePath("/problems/[slug]");
 }
 
 export const handleUpdateProblem = async (formData: FormData) => {
   try {
+    console.log('================== handleUpdateProblem ==================');
+    console.log('formData:', formData);
     const problem = await updateProblem({
       description: formData.get("description") as string,
+      id: formData.get("id") as string,
       slug: formData.get("slug") as string,
+      solution: formData.get("solution") as string,
       starterCode: formData.get("starterCode") as string,
       testCode: formData.get("testCode") as string,
       title: formData.get("title") as string,
       topic: formData.get("topic") as string,
     });
-    console.log('problem created:', problem);
+    console.log('problem updated:', problem);
   } catch (e) {
     console.log("Error creating problem=========");
     console.error(e);
   }
+  revalidatePath("/admin");
+  revalidatePath("/problems/[slug]");
 }

@@ -17,6 +17,7 @@ export async function getProblemByTitle(title: string) {
 
 export async function getProblemBySlug(slug: string) {
   const result = await sql`SELECT * FROM problems WHERE slug = ${slug}`;
+  if (!result.rows[0]) return null;
   return camelCaseData(result.rows[0]);
 }
 
@@ -24,6 +25,7 @@ export async function getProblemBySlug(slug: string) {
 
 interface CreateProblem {
   description: string;
+  solution?: string;
   slug: string;
   starterCode: string;
   testCode: string;
@@ -33,43 +35,59 @@ interface CreateProblem {
 
 export async function createProblem({
   description,
+  solution,
   slug,
   starterCode,
   testCode,
   title,
   topic,
 }: CreateProblem) {
-  const nextIdData = await sql`SELECT MAX(id) FROM problems`;
-  const nextId = Number(nextIdData.rows[0].max) + 1;
 
   const result = await sql`
-   INSERT INTO problems (description, id, slug, starter_code, test_code, title, topic)
-    VALUES (${description}, ${nextId}, ${slug}, ${starterCode}, ${testCode}, ${title}, ${topic})
+   INSERT INTO problems (description, slug, solution, starter_code, test_code, title, topic)
+    VALUES (${description}, ${slug}, ${solution}, ${starterCode}, ${testCode}, ${title}, ${topic})
     RETURNING *;
   `
   return result.rows[0];
 }
 
 /** PUT */
+interface UpdateProblem {
+  description: string;
+  id: string | number,
+  solution?: string;
+  slug: string;
+  starterCode: string;
+  testCode: string;
+  title: string;
+  topic?: string;
+}
 
 export async function updateProblem({
   description,
+  id,
   slug,
+  solution,
   starterCode,
   testCode,
   title,
   topic,
-}: CreateProblem) {
+}: UpdateProblem) {
+  console.log('--------')
+  console.log('updateProblem: ', title)
+  console.log('--------')
   const result = await sql`
     UPDATE problems
     SET description = ${description},
     slug = ${slug},
     starter_code = ${starterCode},
+    solution= ${solution},
     test_code = ${testCode},
     title = ${title},
     topic = ${topic}
-    WHERE title = ${title}
+    WHERE id = ${id}
     RETURNING *;
   `
+  console.log('update Problem result:', result.rows[0]);
   return result.rows[0];
 }
