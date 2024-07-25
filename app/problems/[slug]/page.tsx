@@ -18,15 +18,16 @@ interface PageProps {
 
 export default async function ProblemsPage({ params }: PageProps) {
   const { slug } = params ?? { slug: ''};
+  let user;
+  let userProblem;
 
   const session = await auth() as { user: { email: string } };
 
   const problem = await getProblemBySlug(slug) as Problem;
 
-  const user = await getUser(session.user.email) as User;
-  const userProblem = await getUserProblem(user.email, problem.title)
   if (session && session.user) {
-
+    user = await getUser(session.user.email) as User;
+    userProblem = await getUserProblem(user.email, problem.title)
     if(!userProblem) {
       await createUserProblem({
         email: user.email,
