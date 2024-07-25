@@ -16,6 +16,6 @@ CREATE TABLE user_problem (
   user_favorite BOOLEAN DEFAULT FALSE,
   is_solved BOOLEAN DEFAULT FALSE,
   last_attempted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (problem_title) REFERENCES problems(title)
-)
+  CONSTRAINT fk_users FOREIGN KEY (user_email) REFERENCES users(email),
+  CONSTRAINT fk_problems FOREIGN KEY (problem_title) REFERENCES problems(title)
+);

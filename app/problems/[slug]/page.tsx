@@ -17,8 +17,6 @@ export default async function ProblemsPage({ params }: PageProps) {
   const { slug } = params ?? { slug: ''};
 
   const session = await auth();
-  // TODO create a fetch for userProblems
-  // TODO create favorites button for sidebar
 
   const problem = await getProblemBySlug(slug) as Problem;
 
@@ -26,7 +24,7 @@ export default async function ProblemsPage({ params }: PageProps) {
 
   return (
   <>
-    <Workspace problem={problem} />
+    <Workspace isLoggedIn={!!session} problem={problem} />
   </>
   )
 }

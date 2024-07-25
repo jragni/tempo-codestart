@@ -17,6 +17,7 @@ import { handleSubmitCode } from "./helpers";
 import { WorkspaceProps } from './definitions';
 
 export default function Workspace({
+  isLoggedIn,
   problem: {
     description,
     starterCode,
@@ -114,7 +115,7 @@ export default function Workspace({
             <GrPowerReset size={16} />
           </button>
         </div>
-        <Console fontSize={fontSize} logs={logs} />
+        <Console fontSize={fontSize} isLoggedIn={isLoggedIn} logs={logs} />
       </div>
     </div>
   );

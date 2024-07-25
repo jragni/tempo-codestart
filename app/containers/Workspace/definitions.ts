@@ -14,6 +14,7 @@ export interface Problem {
 }
 
 export interface WorkspaceProps {
+  isLoggedIn: boolean;
   problem: Problem;
 }
 

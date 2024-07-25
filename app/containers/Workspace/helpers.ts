@@ -5,9 +5,9 @@ const consoleLogSpy = jest.spyOn(console, 'log');
   consoleLogSpy.mockRestore(); // Clean up the spy after the test
 });`;
 
-// TODO add python
 
 export const handleSubmitCode = async (code: string) => {
+
   const response = await fetch("https://emkc.org/api/v2/piston/execute", {
     method: "POST",
     headers: {
