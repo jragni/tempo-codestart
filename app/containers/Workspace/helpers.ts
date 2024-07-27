@@ -1,13 +1,5 @@
-
 import { updateUserProblemCode } from "@/app/api/userproblems/handlers";
 import { UpdateUserCode } from "./definitions";
-
-const test = `
-test('myFunction should log a message', () => {
-const consoleLogSpy = jest.spyOn(console, 'log');
-  expect(consoleLogSpy).toHaveBeenCalledWith("Hello, World!");
-  consoleLogSpy.mockRestore(); // Clean up the spy after the test
-});`;
 
 export const handleUpdateUserCode = async ({
   email,

@@ -38,13 +38,14 @@ export default async function ProblemsPage({ params }: PageProps) {
         isSolved: false
       })
     }
-
   }
 
-
   return (
-  <>
-    <Workspace isLoggedIn={!!session} problem={problem} user={user} userProblem={userProblem} />
-  </>
+    <Workspace
+      isLoggedIn={!!session}
+      problem={problem}
+      user={user}
+      userProblem={userProblem}
+    />
   )
 }
