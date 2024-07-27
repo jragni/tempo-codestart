@@ -4,7 +4,7 @@
  */
 "use client"
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { EditorView  } from '@uiw/react-codemirror';
 import CodeMirror from '@uiw/react-codemirror';
 import { GrPowerReset } from "react-icons/gr";
@@ -13,7 +13,10 @@ import { javascript } from '@codemirror/lang-javascript';
 import { Console, Select } from "@components";
 
 import { fontSizes, themeDictionary } from "./constants";
-import { handleSubmitCode, handleUpdateUserCode } from "./helpers";
+import {
+  handleSubmitCode,
+  handleUpdateUserCode,
+} from "./helpers";
 import { WorkspaceProps } from './definitions';
 
 export default function Workspace({
@@ -47,8 +50,8 @@ export default function Workspace({
     // Set last viewed problem in local storage
     localStorage.setItem('last_viewed_problem_slug', slug);
 
-
     let response = await handleSubmitCode(codeValue);
+
     if (user) {
       await handleUpdateUserCode({
         email: user.email,

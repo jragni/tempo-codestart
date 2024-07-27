@@ -1,3 +1,4 @@
+
 import { updateUserProblemCode } from "@/app/api/userproblems/handlers";
 import { UpdateUserCode } from "./definitions";
 
@@ -46,14 +47,6 @@ export const handleSubmitCode = async (code: string) => {
   });
 
   const respData = await response.json();
-
-  // if (!!email) {
-  //   await handleUpdateUserCode({
-  //     email: email,
-  //     problemTitle: title,
-  //     userCode: code,
-  //   });
-  // }
 
   return respData;
 };
