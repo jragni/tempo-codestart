@@ -21,12 +21,14 @@ export interface Theme {
 
 export interface UpdateUserCode {
   email: string;
+  isSolved: boolean;
   problemId: string;
   userCode: string;
 }
 
 export interface WorkspaceProps {
   isLoggedIn: boolean;
+  nextProblemSlug: string;
   problem: Problem;
   user?: User;
   userProblem?: UserProblem;

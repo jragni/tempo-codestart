@@ -8,6 +8,7 @@ import { monokai } from '@uiw/codemirror-theme-monokai';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
 import { Theme } from './definitions';
+import { ToastOptions } from 'react-toastify';
 
 export const themeDictionary: Record<string, Theme> = {
   darcula: {
@@ -44,3 +45,14 @@ export const fontSizes: string[] = [
   '24px',
   '25px',
 ];
+
+export const toastOptions: ToastOptions = {
+  position: "bottom-center",
+  autoClose: 10000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "dark",
+}

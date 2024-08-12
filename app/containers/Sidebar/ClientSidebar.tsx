@@ -18,7 +18,6 @@ interface ClientSidebarProps {
 export default function ClientSidebar({ problems, user }: ClientSidebarProps) {
   if (usePathname() === '/') return null;
 
-
   return (
     <section className="drawer bg-neutral min-h-[calc(100dvh)] w-fit min-w-[47px]">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />

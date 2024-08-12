@@ -3,10 +3,11 @@ import { UpdateUserCode } from "./definitions";
 
 export const handleUpdateUserCode = async ({
   email,
+  isSolved,
   problemId,
   userCode,
 }: UpdateUserCode) => {
-  const response = await updateUserProblemCode({ email, problemId, userCode });
+  const response = await updateUserProblemCode({ email, isSolved, problemId, userCode });
   return response;
 }
 

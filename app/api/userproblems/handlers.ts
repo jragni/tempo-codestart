@@ -54,13 +54,14 @@ export async function createUserProblem({
 
 export async function updateUserProblemCode({
   email,
+  isSolved=false,
   problemId,
   userCode,
 }: UserProblem) {
 
   const result = await sql`
     UPDATE user_problem
-    SET user_code = ${userCode}
+    SET user_code = ${userCode}, is_solved = ${isSolved}
     WHERE user_email = ${email}
     AND problem_id = ${problemId}
     RETURNING *;

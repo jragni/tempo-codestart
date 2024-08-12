@@ -10,6 +10,11 @@ export async function getProblems() {
   return result.rows.map((row) => camelCaseData(row));
 }
 
+export async function getProblemById(id: string) {
+  const result = await sql`SELECT * FROM problems WHERE id = ${id}`;
+  return result.rows[0] || null;
+}
+
 export async function getProblemByTitle(title: string) {
   const result = await sql`SELECT * FROM problems WHERE title = ${title}`;
   return result.rows[0];

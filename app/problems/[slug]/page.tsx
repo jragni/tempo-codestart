@@ -4,7 +4,7 @@
  */
 import { Workspace } from "@containers"
 import { auth } from '@/auth';
-import { getProblemBySlug } from "@/app/api/problems/handlers";
+import { getProblemById, getProblemBySlug } from "@/app/api/problems/handlers";
 import { redirect } from "next/navigation";
 import { Problem } from "@/app/containers/Workspace/definitions";
 import { getUser } from "@/app/api/users/handlers";
@@ -40,9 +40,13 @@ export default async function ProblemsPage({ params }: PageProps) {
     }
   }
 
+  const nextProblem = await getProblemById( String(Number(problem.id) + 1)) as Problem;
+  const nextProblemSlug = nextProblem ? nextProblem.slug : 'welcome-to-tempo';
+
   return (
     <Workspace
       isLoggedIn={!!session}
+      nextProblemSlug={nextProblemSlug}
       problem={problem}
       user={user}
       userProblem={userProblem}

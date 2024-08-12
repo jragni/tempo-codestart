@@ -3,16 +3,20 @@
  *
  */
 "use client"
-
+import 'react-toastify/dist/ReactToastify.css';
 import { useState, useCallback } from 'react';
+import Link from 'next/link';
 import { EditorView  } from '@uiw/react-codemirror';
 import CodeMirror from '@uiw/react-codemirror';
 import { GrPowerReset } from "react-icons/gr";
 import { javascript } from '@codemirror/lang-javascript';
+// @ts-ignore: has no exported member
+import { jest, describe, it, expect, run } from 'jest-lite';
+import { toast, ToastContainer } from 'react-toastify';
 
 import { Console, Select } from "@components";
 
-import { fontSizes, themeDictionary } from "./constants";
+import { fontSizes, themeDictionary, toastOptions } from "./constants";
 import {
   handleSubmitCode,
   handleUpdateUserCode,
@@ -21,11 +25,13 @@ import { WorkspaceProps } from './definitions';
 
 export default function Workspace({
   isLoggedIn,
+  nextProblemSlug,
   problem: {
     description,
-		id: problemId,
+    id: problemId,
     slug,
     starterCode,
+    testCode,
     title,
   },
   user,
@@ -51,15 +57,38 @@ export default function Workspace({
     localStorage.setItem('last_viewed_problem_slug', slug);
 
     let response = await handleSubmitCode(codeValue);
+    setLogs([ ...response.run.output.split('\n')]);
+
+    // Run test runner
+    new Function('expect', 'jest', 'describe', 'it', testCode.split('${codeValue}').join(codeValue))(
+      expect,
+      jest,
+      describe,
+      it,
+    );
+    const testResultsArray = await run();
+    console.log(testResultsArray);
+    const { status } = testResultsArray.at(-1);
+
+    if (status === 'fail') {
+      toast.error('Incorrect, try again!', toastOptions);
+    }
+    console.log('nextProblemSlug: ', nextProblemSlug);
+    if (status === 'pass') {
+      toast.success(
+        <p>All test cases passed! <Link className='btn btn-xs btn-ghost' href={`/problems/${nextProblemSlug}`}>Click for Next</Link></p>,
+        toastOptions
+      );
+    }
 
     if (user) {
       await handleUpdateUserCode({
         email: user.email,
+        isSolved: status === 'pass',
         problemId,
         userCode: codeValue,
       });
     }
-      setLogs([ ...response.run.output.split('\n')]);
 
   }, [codeValue]);
 
@@ -133,6 +162,18 @@ export default function Workspace({
         </div>
         <Console fontSize={fontSize} isLoggedIn={isLoggedIn} logs={logs} />
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }
