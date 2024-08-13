@@ -12,6 +12,7 @@ import { GrPowerReset } from "react-icons/gr";
 import { javascript } from '@codemirror/lang-javascript';
 // @ts-ignore: has no exported member
 import { jest, describe, it, expect, run } from 'jest-lite';
+import { RxTrackNext } from "react-icons/rx";
 import { toast, ToastContainer } from 'react-toastify';
 
 import { Console, Select } from "@components";
@@ -76,7 +77,13 @@ export default function Workspace({
     console.log('nextProblemSlug: ', nextProblemSlug);
     if (status === 'pass') {
       toast.success(
-        <p>All test cases passed! <Link className='btn btn-xs btn-ghost' href={`/problems/${nextProblemSlug}`}>Click for Next</Link></p>,
+        <p>
+          All test cases passed!
+          <Link className='btn btn-xs btn-ghost' href={`/problems/${nextProblemSlug}`}>
+            <RxTrackNext size={16} />
+            Next Problem
+          </Link>
+        </p>,
         toastOptions
       );
     }
