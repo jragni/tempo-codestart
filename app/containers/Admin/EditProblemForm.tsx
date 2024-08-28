@@ -23,7 +23,7 @@ export default function EditProblemForm({
   }, [selectedProblem]);
 
   return (
-    <div>
+    <div className="font-serif">
       <Select
         onChange={(e) => {
           setSelectedProblem(problems.find(({ id }) => id == e.target.value) || problems[0]);
