@@ -7,6 +7,5 @@ export const topicsList = [
   'Conditionals',
   'Arrays',
   'Objects',
-  'Functions',
   'Nested Data',
 ];

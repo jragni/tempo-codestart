@@ -8,6 +8,7 @@ export interface Problem {
   description: string;
   id: string;
   slug: string;
+  solution?: string;
   starterCode: string;
   testCode: string;
   title: string;

@@ -80,6 +80,7 @@ export async function updateProblem({
 }: UpdateProblem) {
   console.log('--------')
   console.log('updateProblem: ', title)
+  console.log('updateProblem id: ', id)
   console.log('--------')
   const result = await sql`
     UPDATE problems
@@ -90,7 +91,7 @@ export async function updateProblem({
     test_code = ${testCode},
     title = ${title},
     topic = ${topic}
-    WHERE id = ${id}
+    WHERE id = ${Number(id)}
     RETURNING *;
   `
   console.log('update Problem result:', result.rows[0]);

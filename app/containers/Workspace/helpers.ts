@@ -1,3 +1,5 @@
+// @ts-ignore: has no exported member
+import { jest, describe, it, expect, run } from 'jest-lite';
 import { updateUserProblemCode } from "@/app/api/userproblems/handlers";
 import { UpdateUserCode } from "./definitions";
 
@@ -43,3 +45,20 @@ export const handleSubmitCode = async (code: string) => {
 
   return respData;
 };
+
+export const handleRunTests = async (testCode: string, codeValue: string) => {
+  try {
+    new Function('expect', 'jest', 'describe', 'it', testCode.split('${codeValue}').join(codeValue))(
+      expect,
+      jest,
+      describe,
+      it,
+    );
+    const testResultsArray = await run();
+    const { status } = testResultsArray.pop();
+    return status;
+  } catch {
+    return 'fail';
+  }
+}
+

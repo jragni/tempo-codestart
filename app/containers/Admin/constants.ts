@@ -1,10 +1,17 @@
 import { handleCreateProblem, handleUpdateProblem } from "app/admin/actions";
 import { FormProps } from "./definitions";
+import EditProblemForm from "./EditProblemForm";
+import CreateProblemForm from "./CreateProblemForm";
 
 export const formOptions = [
   { label: "Create Problem", value: "create-problem" },
   { label: "Edit Problem", value: "edit-problem" },
 ];
+
+export const formDictionary: Record<string, any> = {
+  "create-problem": CreateProblemForm,
+  "edit-problem": EditProblemForm,
+};
 
 export const formPropDictionary: Record<string, FormProps> = {
   "create-problem": {
