@@ -28,7 +28,7 @@ export default async function RootLayout({
   let user = session ?  await handleUserPostAuth(session) as User : null;
 
   return (
-    <html lang="en">
+    <html data-theme="forest" lang="en">
       <body className={`${inter.className}`}>
         <Navbar user={user} />
         <div className="flex w-full pt-[64px]">

@@ -97,8 +97,8 @@ export default function Workspace({
     <div className="flex flex-wrap w-full font-bold bg-base-300">
       {/* Problem section */}
       <div className="min-w-[325px] p-4 max-w-[30%] mb-4">
-        <h3 className="text-3xl mb-10">{title}</h3>
-        <p className="text-sm md:text-lg whitespace-pre-line overflow-y-auto">
+        <h3 className="text-white text-3xl mb-10">{title}</h3>
+        <p className="text-white text-sm md:text-lg whitespace-pre-line overflow-y-auto">
           {description.split("\\n").join("\n\n")}
         </p>
       </div>
