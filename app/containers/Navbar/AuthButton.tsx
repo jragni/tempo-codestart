@@ -25,7 +25,7 @@ export default function AuthButton({ user }: LoginButtonProps) {
   const handleFormAction = async () => {
     try {
       const slug = localStorage.getItem('last_viewed_problem_slug')
-        || 'your-first-problem';
+        || 'problems/welcome-to-tempo';
       await handleSignIn('github', `/problems/${slug}`);
     } catch (e) {
       setError('An error occurred. Please try again.');
