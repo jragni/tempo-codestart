@@ -26,7 +26,7 @@ export default function ClientSidebar({ problems, user }: ClientSidebarProps) {
         open={isOpen}
         onClickOverlay={() => setIsOpen(!isOpen)}
         side={
-          <Menu className="mt-[64px] p-4 w-80 h-full bg-neutral text-base-content flex-nowrap">
+          <Menu className="mt-[64px] p-4 w-80 h-content min-h-[100dvh] bg-neutral text-base-content flex-nowrap grow">
             {topicsList.map((topic) => (
               <Menu.Details
                 key={`${topic}-sidebar-menu-problems`}
