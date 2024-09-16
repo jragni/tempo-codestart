@@ -8,9 +8,7 @@ import { usePathname } from "next/navigation";
 
 import { Problem } from "../Workspace/definitions";
 import { User } from "@/app/definitions";
-
 import { topicsList } from "./constants";
-
 interface ClientSidebarProps {
   problems: Problem[];
   user?: User | null;
@@ -50,6 +48,7 @@ export default function ClientSidebar({ problems, user }: ClientSidebarProps) {
             ))}
           </Menu>
         }
+        sideClassName="z-[10]"
       >
         <button
           className="flex align-center justify-center w-full mt-4"
