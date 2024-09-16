@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.2",
+    "@material-tailwind/react": "^2.1.10",
     "@uiw/codemirror-theme-darcula": "^4.23.0",
     "@uiw/codemirror-theme-github": "^4.23.0",
     "@uiw/codemirror-theme-monokai": "^4.23.0",
