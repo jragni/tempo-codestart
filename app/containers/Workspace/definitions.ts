@@ -6,6 +6,7 @@ import { User, UserProblem } from '@/app/definitions';
 
 export interface Problem {
   description: string;
+  difficulty?: 'Easy' | 'Medium' | 'Hard';
   id: string;
   slug: string;
   solution?: string;

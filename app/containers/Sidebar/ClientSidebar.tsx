@@ -8,13 +8,14 @@ import { usePathname } from "next/navigation";
 
 import { Problem } from "../Workspace/definitions";
 import SidebarMenu from "./SidebarMenu";
-import { User } from "@/app/definitions";
+import { User, UserProblem } from "@/app/definitions";
 interface ClientSidebarProps {
   problems: Problem[];
   user?: User | null;
+  userProblems?: UserProblem[];
 }
 
-export default function ClientSidebar({ problems, user }: ClientSidebarProps) {
+export default function ClientSidebar({ problems, user, userProblems = [] }: ClientSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   if (usePathname() === "/") return null;
 
@@ -53,7 +54,7 @@ export default function ClientSidebar({ problems, user }: ClientSidebarProps) {
             <IoMdClose size={24} />
           </button>
         </div>
-        <SidebarMenu problems={problems} />
+        <SidebarMenu problems={problems} userProblems={userProblems} />
       </Drawer>
     </section>
   );

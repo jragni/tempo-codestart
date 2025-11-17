@@ -29,7 +29,7 @@ export default function Workspace({
   isLoggedIn,
   nextProblemSlug,
   prevProblemSlug,
-  problem: { description, id: problemId, slug, starterCode, testCode, title, topic },
+  problem: { description, difficulty, id: problemId, slug, starterCode, testCode, title, topic },
   user,
   userProblem,
 }: WorkspaceProps) {
@@ -50,6 +50,20 @@ export default function Workspace({
   );
 
   const { theme } = themeDictionary[selectedTheme];
+
+  // Get difficulty badge color
+  const getDifficultyColor = (diff?: string) => {
+    switch (diff) {
+      case 'Easy':
+        return 'badge-success';
+      case 'Medium':
+        return 'badge-warning';
+      case 'Hard':
+        return 'badge-error';
+      default:
+        return 'badge-ghost';
+    }
+  };
 
   const handleReset = () => {
     setCodeValue(starterCode);
@@ -164,9 +178,26 @@ export default function Workspace({
             <li className="text-base-content font-semibold">{title}</li>
           </ul>
         </div>
-        <div className="flex items-center justify-between mb-6 md:mb-10">
-          <h3 className="text-white text-2xl md:text-3xl flex-1">{title}</h3>
-          <div className="flex gap-2">
+        <div className="flex items-start justify-between mb-6 md:mb-10 gap-3">
+          <div className="flex-1">
+            <h3 className="text-white text-2xl md:text-3xl mb-2">{title}</h3>
+            <div className="flex gap-2 flex-wrap">
+              {difficulty && (
+                <span className={`badge ${getDifficultyColor(difficulty)} badge-sm md:badge-md`}>
+                  {difficulty}
+                </span>
+              )}
+              {userProblem?.isSolved && (
+                <span className="badge badge-success badge-sm md:badge-md gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-4 h-4 stroke-current">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Solved
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-2 flex-shrink-0">
             {prevProblemSlug && (
               <Link
                 href={`/problems/${prevProblemSlug}`}
