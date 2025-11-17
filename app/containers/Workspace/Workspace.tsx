@@ -40,6 +40,8 @@ export default function Workspace({
   const [fontSize, setFontSize] = useState<string>("14px");
   const [selectedTheme, setSelectedTheme] = useState<string>("vscodeDark");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const fontSizeOptions = fontSizes.map((fontSize) => ({
     label: fontSize,
@@ -139,6 +141,39 @@ export default function Workspace({
     }
   }
 
+  // Auto-save functionality
+  const autoSaveCode = useCallback(async (code: string) => {
+    if (!user) return;
+
+    setIsSaving(true);
+    try {
+      await handleUpdateUserCode({
+        email: user.email,
+        isSolved: userProblem?.isSolved || false,
+        problemId,
+        userCode: code,
+      });
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Auto-save failed:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [user, problemId, userProblem?.isSolved]);
+
+  // Debounced auto-save (saves 2 seconds after user stops typing)
+  useEffect(() => {
+    if (!user) return;
+
+    const timeoutId = setTimeout(() => {
+      if (codeValue !== (userProblem?.userCode || starterCode)) {
+        autoSaveCode(codeValue);
+      }
+    }, 2000); // 2 second debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [codeValue, user, autoSaveCode, userProblem?.userCode, starterCode]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -152,11 +187,18 @@ export default function Workspace({
         e.preventDefault();
         handleReset();
       }
+      // Ctrl/Cmd + S to manually save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (user) {
+          autoSaveCode(codeValue);
+        }
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [codeValue, slug]); // Dependencies needed for handlers
+  }, [codeValue, slug, user, autoSaveCode]); // Dependencies needed for handlers
 
   return (
     <div className="flex flex-wrap w-full font-bold bg-base-300 animate-fade-in">
@@ -222,9 +264,32 @@ export default function Workspace({
           {description.split("\\n").join("\n\n")}
         </p>
         <div className="mt-6 p-3 bg-base-200 rounded-lg text-xs md:text-sm text-base-content">
-          <p className="font-semibold mb-1">Keyboard Shortcuts:</p>
+          <div className="flex justify-between items-center mb-1">
+            <p className="font-semibold">Keyboard Shortcuts:</p>
+            {user && (
+              <span className="text-xs flex items-center gap-1">
+                {isSaving && (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    <span>Saving...</span>
+                  </>
+                )}
+                {!isSaving && lastSaved && (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-3 h-3 stroke-success">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span className="text-success">Saved</span>
+                  </>
+                )}
+              </span>
+            )}
+          </div>
           <p>• <kbd className="kbd kbd-xs">Ctrl</kbd> + <kbd className="kbd kbd-xs">Enter</kbd> - Submit code</p>
           <p>• <kbd className="kbd kbd-xs">Ctrl</kbd> + <kbd className="kbd kbd-xs">R</kbd> - Reset code</p>
+          {user && (
+            <p>• <kbd className="kbd kbd-xs">Ctrl</kbd> + <kbd className="kbd kbd-xs">S</kbd> - Save draft</p>
+          )}
         </div>
       </div>
       {/* Code Section */}
