@@ -34,9 +34,10 @@ export default function AuthButton({ user }: LoginButtonProps) {
 
   return (user) ? (
     <button
-      className="btn btn-ghost"
+      className="btn btn-ghost btn-sm md:btn-md"
       formAction={handleSignOut}
       type="submit"
+      aria-label="Sign out"
     >
       {user.image
         ? (
@@ -48,7 +49,7 @@ export default function AuthButton({ user }: LoginButtonProps) {
           />
         ) : <FaRegUser />
       }
-      Sign Out
+      <span className="hidden sm:inline">Sign Out</span>
     </button>
     ) : (
     <div>
@@ -56,14 +57,18 @@ export default function AuthButton({ user }: LoginButtonProps) {
         className={`
           btn
           btn-outline
+          btn-sm
+          md:btn-md
           ${!!error && 'btn-error'}
         `}
         formAction={handleFormAction}
         type="submit"
+        aria-label="Sign in with GitHub"
       >
         <FaGithub />
-        {signInLabel}
-        {pending && <span className="loading loading-bars"></span>}
+        <span className="hidden sm:inline">{signInLabel}</span>
+        <span className="sm:hidden">Sign In</span>
+        {pending && <span className="loading loading-bars loading-sm"></span>}
       </button>
       <p className="text-center text-xs text-error">{error}</p>
     </div>

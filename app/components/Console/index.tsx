@@ -38,7 +38,9 @@ export default function Console({
         flex
         flex-col
         border-none
-        h-[50dvh]
+        h-[35vh]
+        md:h-[40vh]
+        lg:h-[45vh]
         overflow-auto
         resize-none
         rounded-none

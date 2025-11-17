@@ -31,3 +31,63 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer base {
+  /* Smooth transitions for interactive elements */
+  button, a, select {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Custom scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.primary') theme('colors.base-300');
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-base-300;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-full;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-focus;
+  }
+}
+
+/* Fade-in animation for page content */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Slide-in animation for drawer */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideInLeft 0.3s ease-out;
+}

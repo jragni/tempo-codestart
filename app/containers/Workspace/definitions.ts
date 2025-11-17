@@ -29,7 +29,8 @@ export interface UpdateUserCode {
 
 export interface WorkspaceProps {
   isLoggedIn: boolean;
-  nextProblemSlug: string;
+  nextProblemSlug: string | null;
+  prevProblemSlug?: string | null;
   problem: Problem;
   user?: User;
   userProblem?: UserProblem;

@@ -41,12 +41,16 @@ export default async function ProblemsPage({ params }: PageProps) {
   }
 
   const nextProblem = await getProblemById( String(Number(problem.id) + 1)) as Problem;
-  const nextProblemSlug = nextProblem ? nextProblem.slug : 'welcome-to-tempo';
+  const nextProblemSlug = nextProblem ? nextProblem.slug : null;
+
+  const prevProblem = await getProblemById( String(Number(problem.id) - 1)) as Problem;
+  const prevProblemSlug = prevProblem ? prevProblem.slug : null;
 
   return (
     <Workspace
       isLoggedIn={!!session}
       nextProblemSlug={nextProblemSlug}
+      prevProblemSlug={prevProblemSlug}
       problem={problem}
       user={user}
       userProblem={userProblem}

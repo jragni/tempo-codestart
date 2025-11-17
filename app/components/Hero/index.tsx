@@ -30,15 +30,15 @@ export default function Hero() {
         }}
       />
       <div className="card">
-        <div className="card-body leading-snug min-w-[280px] max-w-[400px]">
-          <h2 className="card-title leading-snug text-5xl font-bold my-4">
+        <div className="card-body leading-snug min-w-[280px] max-w-[400px] md:max-w-[500px]">
+          <h2 className="card-title leading-snug text-3xl md:text-4xl lg:text-5xl font-bold my-4">
             Tempo Codestart:
           </h2>
-          <h3 className="leading-snug text-4xl">
+          <h3 className="leading-snug text-2xl md:text-3xl lg:text-4xl">
             Your Bootcamp Coding Interview Launchpad
           </h3>
-          <h4 className="my-4 text-lg">
-            Go from no experience to a competitve and confident coding bootcamp applicant.
+          <h4 className="my-4 text-base md:text-lg lg:text-xl">
+            Go from no experience to a competitive and confident coding bootcamp applicant.
           </h4>
           <div className="card-actions">
             <Link className="btn btn-primary" href={problemLink}>Start Preparing</Link>
