@@ -6,7 +6,7 @@
  */
 "use client"
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo, memo } from 'react';
 import Log from './Log';
 interface ConsoleProps {
   fontSize?: string;
@@ -14,7 +14,7 @@ interface ConsoleProps {
   logs: string[];
 }
 
-export default function Console({
+function Console({
   fontSize,
   isLoggedIn,
   logs=[],
@@ -27,9 +27,12 @@ export default function Console({
     }
   }, [logs]);
 
-  const preSubmitText = isLoggedIn
-    ? 'Press `Submit` to run code...'
-    : 'Press `Submit` to run code. Log in to save your progress...';
+  const preSubmitText = useMemo(() =>
+    isLoggedIn
+      ? 'Press `Submit` to run code...'
+      : 'Press `Submit` to run code. Log in to save your progress...',
+    [isLoggedIn]
+  );
 
   return (
     <div
@@ -67,3 +70,5 @@ export default function Console({
     </div>
   );
 }
+
+export default memo(Console);
