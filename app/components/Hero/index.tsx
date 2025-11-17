@@ -3,7 +3,6 @@
  */
 import Link from 'next/link'
 import Image from 'next/image'
-import HeroImage from 'public/hero-coding-image.jpeg';
 
 export default function Hero() {
   const problemLink = '/problems/welcome-to-tempo';
@@ -23,7 +22,7 @@ export default function Hero() {
     >
       <div className="absolute inset-0 w-full h-full overflow-hidden opacity-35">
         <Image
-          src={HeroImage}
+          src="/hero-coding-image.jpeg"
           alt="Coding background"
           fill
           className="object-cover"
