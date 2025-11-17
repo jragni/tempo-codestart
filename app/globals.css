@@ -38,6 +38,22 @@ body {
     @apply transition-all duration-200 ease-in-out;
   }
 
+  /* Enhanced focus states for keyboard navigation */
+  button:focus-visible,
+  a:focus-visible,
+  select:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary ring-2 ring-primary ring-offset-2;
+  }
+
+  /* Remove default focus for mouse users */
+  button:focus:not(:focus-visible),
+  a:focus:not(:focus-visible),
+  select:focus:not(:focus-visible) {
+    @apply outline-none;
+  }
+
   /* Custom scrollbar styling */
   * {
     scrollbar-width: thin;

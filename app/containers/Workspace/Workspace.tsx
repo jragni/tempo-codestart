@@ -29,7 +29,7 @@ export default function Workspace({
   isLoggedIn,
   nextProblemSlug,
   prevProblemSlug,
-  problem: { description, id: problemId, slug, starterCode, testCode, title },
+  problem: { description, id: problemId, slug, starterCode, testCode, title, topic },
   user,
   userProblem,
 }: WorkspaceProps) {
@@ -63,38 +63,63 @@ export default function Workspace({
       localStorage.setItem("last_viewed_problem_slug", slug);
 
       let response = await handleSubmitCode(codeValue);
-      setLogs([...response.run.output.split("\n")]);
+
+      // Check if response contains error
+      if (response.run && response.run.output) {
+        setLogs([...response.run.output.split("\n")]);
+
+        // Check if output contains error messages
+        if (response.run.output.includes('Error executing code')) {
+          toast.error("Failed to execute code. Please check your syntax and try again.", toastOptions);
+          return;
+        }
+      } else {
+        setLogs(["Unexpected response format. Please try again."]);
+        toast.error("Something went wrong. Please try again.", toastOptions);
+        return;
+      }
 
       // Run test runner
       const status = await handleRunTests(testCode, codeValue);
 
       if (status === "fail") {
-        toast.error("Incorrect, try again!", toastOptions);
+        toast.error("Tests failed. Check the console output and try again!", toastOptions);
       }
       if (status === "pass") {
         toast.success(
           <p>
             All test cases passed!
-            <Link
-              className="btn btn-xs btn-ghost"
-              href={`/problems/${nextProblemSlug}`}
-            >
-              <RxTrackNext size={16} />
-              Next Problem
-            </Link>
+            {nextProblemSlug && (
+              <Link
+                className="btn btn-xs btn-ghost"
+                href={`/problems/${nextProblemSlug}`}
+              >
+                <RxTrackNext size={16} />
+                Next Problem
+              </Link>
+            )}
           </p>,
           toastOptions
         );
       }
 
       if (user) {
-        await handleUpdateUserCode({
-          email: user.email,
-          isSolved: status === "pass",
-          problemId,
-          userCode: codeValue,
-        });
+        try {
+          await handleUpdateUserCode({
+            email: user.email,
+            isSolved: status === "pass",
+            problemId,
+            userCode: codeValue,
+          });
+        } catch (error) {
+          console.error('Failed to save progress:', error);
+          toast.warning("Code ran successfully but couldn't save progress.", toastOptions);
+        }
       }
+    } catch (error) {
+      console.error('Submit error:', error);
+      toast.error("An unexpected error occurred. Please try again.", toastOptions);
+      setLogs([`Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`]);
     } finally {
       setIsSubmitting(false);
     }
@@ -123,6 +148,22 @@ export default function Workspace({
     <div className="flex flex-wrap w-full font-bold bg-base-300 animate-fade-in">
       {/* Problem section */}
       <div className="w-full sm:w-full md:w-[45%] lg:w-[35%] xl:max-w-[30%] p-4 md:p-6">
+        {/* Breadcrumbs */}
+        <div className="text-sm breadcrumbs mb-4">
+          <ul>
+            <li>
+              <Link href="/" className="text-primary hover:text-primary-focus">
+                Home
+              </Link>
+            </li>
+            {topic && (
+              <li className="text-base-content">
+                {topic}
+              </li>
+            )}
+            <li className="text-base-content font-semibold">{title}</li>
+          </ul>
+        </div>
         <div className="flex items-center justify-between mb-6 md:mb-10">
           <h3 className="text-white text-2xl md:text-3xl flex-1">{title}</h3>
           <div className="flex gap-2">

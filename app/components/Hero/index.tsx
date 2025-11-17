@@ -2,6 +2,7 @@
  * Hero component
  */
 import Link from 'next/link'
+import Image from 'next/image'
 import HeroImage from 'public/hero-coding-image.jpeg';
 
 export default function Hero() {
@@ -20,15 +21,17 @@ export default function Hero() {
         relative
       "
     >
-      <div
-        className="absolute top-0 left-0 right-0 opacity-35 inset-0 w-full"
-        style={{
-          backgroundImage: `url(${HeroImage.src})`,
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-        }}
-      />
+      <div className="absolute inset-0 w-full h-full overflow-hidden opacity-35">
+        <Image
+          src={HeroImage}
+          alt="Coding background"
+          fill
+          className="object-cover"
+          priority
+          quality={75}
+          sizes="100vw"
+        />
+      </div>
       <div className="card">
         <div className="card-body leading-snug min-w-[280px] max-w-[400px] md:max-w-[500px]">
           <h2 className="card-title leading-snug text-3xl md:text-4xl lg:text-5xl font-bold my-4">

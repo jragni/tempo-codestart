@@ -14,36 +14,47 @@ export const handleUpdateUserCode = async ({
 }
 
 export const handleSubmitCode = async (code: string) => {
-
-  const response = await fetch("https://emkc.org/api/v2/piston/execute", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      "language": "javascript",
-      "version": "18.15.0",
-      "aliases": [
-          "node-javascript",
-          "node-js",
-          "javascript",
-          "js"
-      ],
-      "runtime": "node",
-      "files": [
-      {
-        "name": "index.js",
-        "content": code,
+  try {
+    const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    ],
-    "compile_memory_limit": -1,
-    "run_memory_limit": -1,
-    })
-  });
+      body: JSON.stringify({
+        "language": "javascript",
+        "version": "18.15.0",
+        "aliases": [
+            "node-javascript",
+            "node-js",
+            "javascript",
+            "js"
+        ],
+        "runtime": "node",
+        "files": [
+        {
+          "name": "index.js",
+          "content": code,
+        },
+      ],
+      "compile_memory_limit": -1,
+      "run_memory_limit": -1,
+      })
+    });
 
-  const respData = await response.json();
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
 
-  return respData;
+    const respData = await response.json();
+    return respData;
+  } catch (error) {
+    console.error('Code execution error:', error);
+    return {
+      run: {
+        output: `Error executing code: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`
+      }
+    };
+  }
 };
 
 export const handleRunTests = async (testCode: string, codeValue: string) => {
