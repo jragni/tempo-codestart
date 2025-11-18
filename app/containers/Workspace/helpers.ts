@@ -1,5 +1,3 @@
-// @ts-ignore: has no exported member
-import { jest, describe, it, expect, run } from 'jest-lite';
 import { updateUserProblemCode } from "@/app/api/userproblems/handlers";
 import { UpdateUserCode } from "./definitions";
 
@@ -76,6 +74,15 @@ let previousResultCount = 0;
 
 export const handleRunTests = async (testCode: string, codeValue: string): Promise<TestResultsSummary> => {
   try {
+    // Only run in browser environment
+    if (typeof window === 'undefined') {
+      throw new Error('Tests can only run in browser environment');
+    }
+
+    // Dynamic import of jest-lite (browser-only)
+    // @ts-ignore: has no exported member
+    const { jest, describe, it, expect, run } = await import('jest-lite');
+
     // Create unique timestamp for this test run
     const timestamp = Date.now();
 
