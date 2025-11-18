@@ -71,6 +71,9 @@ export interface TestResultsSummary {
   failedTests: number;
 }
 
+// Track the number of test results we've already processed
+let previousResultCount = 0;
+
 export const handleRunTests = async (testCode: string, codeValue: string): Promise<TestResultsSummary> => {
   try {
     // Create unique timestamp for this test run
@@ -97,13 +100,11 @@ export const handleRunTests = async (testCode: string, codeValue: string): Promi
     // Run all tests and get ALL results (includes previous runs)
     const allResults = await run();
 
-    // Filter to only get results from THIS run (matching our timestamp)
-    const currentRunResults = allResults.filter((result: any) => {
-      // Check if any part of the test path includes our timestamp
-      return result.testPath && result.testPath.some((name: string) =>
-        String(name).includes(`_${timestamp}`)
-      );
-    });
+    // Get only the NEW results from this run (after previousResultCount)
+    const currentRunResults = allResults.slice(previousResultCount);
+
+    // Update the counter for next run
+    previousResultCount = allResults.length;
 
     // Process test results and clean up display names
     const results: TestResult[] = currentRunResults.map((result: any) => {
@@ -115,7 +116,8 @@ export const handleRunTests = async (testCode: string, codeValue: string): Promi
       return {
         status: result.status,
         testName: cleanName,
-        error: result.errors?.[0] || (result.status === 'fail' ? 'Test assertion failed' : undefined)
+        // Only include error if test actually failed
+        error: result.status === 'fail' ? (result.errors?.[0] || 'Test assertion failed') : undefined
       };
     });
 
