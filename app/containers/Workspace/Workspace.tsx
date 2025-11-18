@@ -71,12 +71,12 @@ export default function Workspace({
     }
   };
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setCodeValue(starterCode);
     setLogs([]);
-  };
+  }, [starterCode]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
     try {
       // Set last viewed problem in local storage
@@ -154,7 +154,7 @@ export default function Workspace({
     } finally {
       setIsSubmitting(false);
     }
-  }
+  }, [slug, codeValue, testCode, userProblem, user, problemId, nextProblemSlug, title]);
 
   // Auto-save functionality
   const autoSaveCode = useCallback(async (code: string) => {
@@ -213,7 +213,7 @@ export default function Workspace({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [codeValue, slug, user, autoSaveCode]); // Dependencies needed for handlers
+  }, [codeValue, user, autoSaveCode, handleSubmit, handleReset]);
 
   return (
     <div className="flex flex-wrap w-full font-bold bg-base-300 animate-fade-in">

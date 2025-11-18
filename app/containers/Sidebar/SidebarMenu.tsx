@@ -122,7 +122,7 @@ export default function SidebarMenu({ problems, userProblems = [] }: SidebarMenu
         </div>
         {searchQuery && (
           <span className="text-xs text-base-content/60 mt-1 ml-1">
-            Searching for "{searchQuery}"
+            Searching for &ldquo;{searchQuery}&rdquo;
           </span>
         )}
       </div>
