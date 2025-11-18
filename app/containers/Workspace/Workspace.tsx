@@ -154,7 +154,7 @@ export default function Workspace({
     } finally {
       setIsSubmitting(false);
     }
-  }, [slug, codeValue, testCode, userProblem, user, problemId, nextProblemSlug, title]);
+  }, [slug, codeValue, testCode, userProblem, user, problemId, nextProblemSlug]);
 
   // Auto-save functionality
   const autoSaveCode = useCallback(async (code: string) => {

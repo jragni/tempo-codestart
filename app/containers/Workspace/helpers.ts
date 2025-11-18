@@ -73,20 +73,41 @@ export interface TestResultsSummary {
 
 export const handleRunTests = async (testCode: string, codeValue: string): Promise<TestResultsSummary> => {
   try {
-    new Function('expect', 'jest', 'describe', 'it', testCode.split('${codeValue}').join(codeValue))(
+    // Make test names unique by appending timestamp
+    // This forces jest-circus to treat each run as completely new tests
+    // Prevents caching/accumulation of old test results
+    const timestamp = Date.now();
+    const uniqueTestCode = testCode
+      .replace(/describe\s*\(\s*['"`]([^'"`]+)['"`]/g, `describe('$1_${timestamp}'`)
+      .replace(/it\s*\(\s*['"`]([^'"`]+)['"`]/g, `it('$1_${timestamp}'`);
+
+    // Execute the test code with unique names
+    new Function('expect', 'jest', 'describe', 'it', uniqueTestCode.split('${codeValue}').join(codeValue))(
       expect,
       jest,
       describe,
       it,
     );
-    const testResultsArray = await run();
 
-    // Process all test results
-    const results: TestResult[] = testResultsArray.map((result: any) => ({
-      status: result.status,
-      testName: result.name || 'Test case',
-      error: result.errors?.[0]?.message || (result.status === 'fail' ? 'Test assertion failed' : undefined)
-    }));
+    // Run all tests and get results
+    const allResults = await run();
+
+    // Filter to only get results from THIS run (matching our timestamp)
+    const currentRunResults = allResults.filter((result: any) =>
+      result.testPath && result.testPath.some((name: string) => name.includes(`_${timestamp}`))
+    );
+
+    // Process test results from this specific run
+    const results: TestResult[] = currentRunResults.map((result: any) => {
+      // Remove timestamp suffix from test names for display
+      const cleanName = result.testPath?.[result.testPath.length - 1]?.replace(/_\d+$/, '') || 'Test case';
+
+      return {
+        status: result.status,
+        testName: cleanName,
+        error: result.errors?.[0] || (result.status === 'fail' ? 'Test assertion failed' : undefined)
+      };
+    });
 
     const passedTests = results.filter(r => r.status === 'pass').length;
     const failedTests = results.filter(r => r.status === 'fail').length;

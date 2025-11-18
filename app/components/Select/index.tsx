@@ -63,20 +63,22 @@ export default function BaseSelect ({
           value={value}
           disabled={disabled}
         >
-          {placeholder && (
-            <Option value="" disabled>
-              {placeholder}
-            </Option>
-          )}
-          {options.map(({ label, value: optionValue }: OptionProps) => (
-            <Option
-              className="text-base-content hover:bg-primary/10"
-              key={`${optionValue}-label-${label}`}
-              value={optionValue}
-            >
-              {label}
-            </Option>
-          ))}
+          <>
+            {placeholder && (
+              <Option key="placeholder" value="" disabled>
+                {placeholder}
+              </Option>
+            )}
+            {options.map(({ label, value: optionValue }: OptionProps) => (
+              <Option
+                className="text-base-content hover:bg-primary/10"
+                key={`${optionValue}-label-${label}`}
+                value={optionValue}
+              >
+                {label}
+              </Option>
+            ))}
+          </>
         </Select>
         {/* Chevron icon - positioned absolutely */}
         <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
