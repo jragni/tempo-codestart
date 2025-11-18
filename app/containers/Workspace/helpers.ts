@@ -57,7 +57,21 @@ export const handleSubmitCode = async (code: string) => {
   }
 };
 
-export const handleRunTests = async (testCode: string, codeValue: string) => {
+export interface TestResult {
+  status: 'pass' | 'fail';
+  testName?: string;
+  error?: string;
+}
+
+export interface TestResultsSummary {
+  status: 'pass' | 'fail';
+  results: TestResult[];
+  totalTests: number;
+  passedTests: number;
+  failedTests: number;
+}
+
+export const handleRunTests = async (testCode: string, codeValue: string): Promise<TestResultsSummary> => {
   try {
     new Function('expect', 'jest', 'describe', 'it', testCode.split('${codeValue}').join(codeValue))(
       expect,
@@ -66,10 +80,37 @@ export const handleRunTests = async (testCode: string, codeValue: string) => {
       it,
     );
     const testResultsArray = await run();
-    const { status } = testResultsArray.pop();
-    return status;
-  } catch {
-    return 'fail';
+
+    // Process all test results
+    const results: TestResult[] = testResultsArray.map((result: any) => ({
+      status: result.status,
+      testName: result.name || 'Test case',
+      error: result.errors?.[0]?.message || (result.status === 'fail' ? 'Test assertion failed' : undefined)
+    }));
+
+    const passedTests = results.filter(r => r.status === 'pass').length;
+    const failedTests = results.filter(r => r.status === 'fail').length;
+    const overallStatus = failedTests === 0 ? 'pass' : 'fail';
+
+    return {
+      status: overallStatus,
+      results,
+      totalTests: results.length,
+      passedTests,
+      failedTests
+    };
+  } catch (error) {
+    return {
+      status: 'fail',
+      results: [{
+        status: 'fail',
+        testName: 'Test execution',
+        error: error instanceof Error ? error.message : 'Unknown test execution error'
+      }],
+      totalTests: 1,
+      passedTests: 0,
+      failedTests: 1
+    };
   }
 }
 

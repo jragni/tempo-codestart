@@ -15,13 +15,14 @@ import { javascript } from "@codemirror/lang-javascript";
 import { RxTrackNext, RxTrackPrevious } from "react-icons/rx";
 import { toast, ToastContainer } from "react-toastify";
 
-import { Console, Select } from "@components";
+import { Console, Select, TestResults } from "@components";
 
 import { fontSizes, themeDictionary, toastOptions } from "./constants";
 import {
   handleRunTests,
   handleSubmitCode,
   handleUpdateUserCode,
+  TestResultsSummary,
 } from "./helpers";
 import { WorkspaceProps } from "./definitions";
 
@@ -42,6 +43,8 @@ export default function Workspace({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [testResults, setTestResults] = useState<TestResultsSummary | null>(null);
+  const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
 
   const fontSizeOptions = fontSizes.map((fontSize) => ({
     label: fontSize,
@@ -96,15 +99,20 @@ export default function Workspace({
       }
 
       // Run test runner
-      const status = await handleRunTests(testCode, codeValue);
+      const results = await handleRunTests(testCode, codeValue);
+      setTestResults(results);
+      setActiveTab('tests'); // Switch to tests tab to show results
 
-      if (status === "fail") {
-        toast.error("Tests failed. Check the console output and try again!", toastOptions);
+      if (results.status === "fail") {
+        toast.error(
+          `${results.failedTests} of ${results.totalTests} tests failed. Check the test results!`,
+          toastOptions
+        );
       }
-      if (status === "pass") {
+      if (results.status === "pass") {
         toast.success(
           <p>
-            All test cases passed!
+            All {results.totalTests} test cases passed!
             {nextProblemSlug && (
               <Link
                 className="btn btn-xs btn-ghost"
@@ -123,7 +131,7 @@ export default function Workspace({
         try {
           await handleUpdateUserCode({
             email: user.email,
-            isSolved: status === "pass",
+            isSolved: results.status === "pass",
             problemId,
             userCode: codeValue,
           });
@@ -356,7 +364,45 @@ export default function Workspace({
             <GrPowerReset size={16} />
           </button>
         </div>
-        <Console fontSize={fontSize} isLoggedIn={isLoggedIn} logs={logs} />
+        {/* Tabbed Output Section */}
+        <div className="bg-base-200">
+          {/* Tab Headers */}
+          <div className="tabs tabs-boxed bg-base-300 rounded-none">
+            <button
+              className={`tab tab-sm md:tab-md ${activeTab === 'console' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('console')}
+              aria-label="Show console output"
+            >
+              Console
+              {logs.length > 0 && (
+                <span className="badge badge-sm badge-primary ml-2">{logs.length}</span>
+              )}
+            </button>
+            <button
+              className={`tab tab-sm md:tab-md ${activeTab === 'tests' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('tests')}
+              aria-label="Show test results"
+            >
+              Test Results
+              {testResults && (
+                <span className={`badge badge-sm ml-2 ${
+                  testResults.status === 'pass' ? 'badge-success' : 'badge-error'
+                }`}>
+                  {testResults.passedTests}/{testResults.totalTests}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="min-h-[35vh] md:min-h-[40vh] lg:min-h-[45vh] max-h-[50vh] overflow-auto">
+            {activeTab === 'console' ? (
+              <Console fontSize={fontSize} isLoggedIn={isLoggedIn} logs={logs} />
+            ) : (
+              <TestResults testResults={testResults} fontSize={fontSize} />
+            )}
+          </div>
+        </div>
       </div>
       <ToastContainer
         position="top-center"
