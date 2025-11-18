@@ -73,23 +73,51 @@ export interface TestResultsSummary {
 
 export const handleRunTests = async (testCode: string, codeValue: string): Promise<TestResultsSummary> => {
   try {
-    // Execute test code
-    new Function('expect', 'jest', 'describe', 'it', testCode.split('${codeValue}').join(codeValue))(
+    // Create unique timestamp for this test run
+    const timestamp = Date.now();
+
+    // Make test names unique by appending timestamp
+    // Pattern: describe('Name', ...) -> describe('Name_timestamp', ...)
+    const uniqueTestCode = testCode
+      .replace(/describe\s*\(\s*(['"`])(.+?)\1\s*,/g, (match, quote, name) => {
+        return `describe(${quote}${name}_${timestamp}${quote},`;
+      })
+      .replace(/it\s*\(\s*(['"`])(.+?)\1\s*,/g, (match, quote, name) => {
+        return `it(${quote}${name}_${timestamp}${quote},`;
+      });
+
+    // Execute test code with unique names
+    new Function('expect', 'jest', 'describe', 'it', uniqueTestCode.split('${codeValue}').join(codeValue))(
       expect,
       jest,
       describe,
       it,
     );
 
-    // Run tests and get all results
-    const testResultsArray = await run();
+    // Run all tests and get ALL results (includes previous runs)
+    const allResults = await run();
 
-    // Process all test results
-    const results: TestResult[] = testResultsArray.map((result: any) => ({
-      status: result.status,
-      testName: result.testPath?.[result.testPath.length - 1] || 'Test case',
-      error: result.errors?.[0] || (result.status === 'fail' ? 'Test assertion failed' : undefined)
-    }));
+    // Filter to only get results from THIS run (matching our timestamp)
+    const currentRunResults = allResults.filter((result: any) => {
+      // Check if any part of the test path includes our timestamp
+      return result.testPath && result.testPath.some((name: string) =>
+        String(name).includes(`_${timestamp}`)
+      );
+    });
+
+    // Process test results and clean up display names
+    const results: TestResult[] = currentRunResults.map((result: any) => {
+      // Get the last part of test path (the actual test name)
+      const testName = result.testPath?.[result.testPath.length - 1] || 'Test case';
+      // Remove timestamp suffix for clean display
+      const cleanName = String(testName).replace(/_\d+$/, '');
+
+      return {
+        status: result.status,
+        testName: cleanName,
+        error: result.errors?.[0] || (result.status === 'fail' ? 'Test assertion failed' : undefined)
+      };
+    });
 
     const passedTests = results.filter(r => r.status === 'pass').length;
     const failedTests = results.filter(r => r.status === 'fail').length;
