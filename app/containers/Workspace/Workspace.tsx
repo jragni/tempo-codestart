@@ -15,7 +15,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { RxTrackNext, RxTrackPrevious } from "react-icons/rx";
 import { toast, ToastContainer } from "react-toastify";
 
-import { Console, Select, TestResults } from "@components";
+import { Console, Select, TestResults, SuccessAnimation } from "@components";
 
 import { fontSizes, themeDictionary, toastOptions } from "./constants";
 import {
@@ -45,6 +45,7 @@ export default function Workspace({
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [testResults, setTestResults] = useState<TestResultsSummary | null>(null);
   const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
   const fontSizeOptions = fontSizes.map((fontSize) => ({
     label: fontSize,
@@ -110,6 +111,12 @@ export default function Workspace({
         );
       }
       if (results.status === "pass") {
+        // Show success animation only if problem wasn't previously solved
+        const isFirstSolve = !userProblem?.isSolved;
+        if (isFirstSolve) {
+          setShowSuccess(true);
+        }
+
         toast.success(
           <p>
             All {results.totalTests} test cases passed!
@@ -415,6 +422,13 @@ export default function Workspace({
         draggable
         pauseOnHover
         theme="dark"
+      />
+
+      {/* Success Animation */}
+      <SuccessAnimation
+        show={showSuccess}
+        onComplete={() => setShowSuccess(false)}
+        problemTitle={title}
       />
     </div>
   );
