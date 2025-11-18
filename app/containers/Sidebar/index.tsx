@@ -23,7 +23,7 @@ export default async function Sidebar({ user }: SidebarProps) {
     try {
       const result = await sql`
         SELECT * FROM user_problem
-        WHERE email = ${user.email}
+        WHERE user_email = ${user.email}
       `;
       userProblems = result.rows.map((row) => camelCaseData(row)) as UserProblem[];
     } catch (error) {

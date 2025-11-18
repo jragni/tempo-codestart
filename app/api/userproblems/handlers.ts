@@ -11,7 +11,7 @@ import { UserProblem } from '@/app/definitions';
 export async function getUserProblems(email: string) {
   const result = await sql`
     SELECT * FROM user_problem
-    WHERE email = ${email}
+    WHERE user_email = ${email}
   `;
   return camelCaseData(result.rows[0]);
 }
