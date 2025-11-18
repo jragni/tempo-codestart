@@ -80,10 +80,10 @@ export const handleRunTests = async (testCode: string, codeValue: string): Promi
     // Pattern: describe('Name', ...) -> describe('Name_timestamp', ...)
     const uniqueTestCode = testCode
       .replace(/describe\s*\(\s*(['"`])(.+?)\1\s*,/g, (match, quote, name) => {
-        return `describe(${quote}${name}_${timestamp}${quote},`;
+        return 'describe(' + quote + name + '_' + timestamp + quote + ',';
       })
       .replace(/it\s*\(\s*(['"`])(.+?)\1\s*,/g, (match, quote, name) => {
-        return `it(${quote}${name}_${timestamp}${quote},`;
+        return 'it(' + quote + name + '_' + timestamp + quote + ',';
       });
 
     // Execute test code with unique names
