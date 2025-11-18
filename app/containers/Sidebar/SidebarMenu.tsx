@@ -70,42 +70,61 @@ export default function SidebarMenu({ problems, userProblems = [] }: SidebarMenu
 
   return (
     <div className="space-y-4">
-      {/* Progress Summary Card */}
+      {/* Progress Summary Card - Enhanced */}
       {userProblems.length > 0 && (
-        <div className="card bg-base-200 shadow-sm">
+        <div className="card bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 shadow-sm">
           <div className="card-body p-4 space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold">Your Progress</span>
-              <span className="text-xs badge badge-primary">{overallStats.percentage}%</span>
+              <span className="text-sm font-bold text-base-content">Your Progress</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs badge badge-primary font-mono">{overallStats.percentage}%</span>
+                {overallStats.percentage === 100 && (
+                  <span className="text-lg">🎉</span>
+                )}
+              </div>
             </div>
-            <div className="w-full bg-base-300 rounded-full h-2">
+            <div className="w-full bg-base-300/50 rounded-full h-2.5 shadow-inner">
               <div
-                className="bg-success h-2 rounded-full transition-all duration-500"
+                className="bg-gradient-to-r from-success to-primary h-2.5 rounded-full transition-all duration-500 shadow-sm"
                 style={{ width: `${overallStats.percentage}%` }}
               ></div>
             </div>
-            <div className="flex justify-between text-xs text-base-content/70">
-              <span>{overallStats.totalSolved} solved</span>
-              <span>{overallStats.totalProblems} total</span>
+            <div className="flex justify-between text-xs">
+              <span className="text-success font-semibold">{overallStats.totalSolved} solved</span>
+              <span className="text-base-content/60">{overallStats.totalProblems - overallStats.totalSolved} remaining</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* Search Bar */}
+      {/* Search Bar - Enhanced with clear button */}
       <div className="form-control">
-        <div className="input-group input-group-sm">
-          <span className="bg-base-200">
-            <FaSearch className="w-3 h-3" />
+        <div className="input-group input-group-sm shadow-sm">
+          <span className="bg-base-200 px-3">
+            <FaSearch className="w-3.5 h-3.5 text-base-content/50" />
           </span>
           <input
             type="text"
             placeholder="Search problems..."
-            className="input input-sm input-bordered w-full"
+            className="input input-sm input-bordered w-full focus:outline-primary"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          {searchQuery && (
+            <button
+              className="btn btn-sm btn-ghost hover:btn-error"
+              onClick={() => setSearchQuery("")}
+              aria-label="Clear search"
+            >
+              ✕
+            </button>
+          )}
         </div>
+        {searchQuery && (
+          <span className="text-xs text-base-content/60 mt-1 ml-1">
+            Searching for "{searchQuery}"
+          </span>
+        )}
       </div>
 
       {/* Topics Menu */}
@@ -130,88 +149,157 @@ export default function SidebarMenu({ problems, userProblems = [] }: SidebarMenu
             <Menu.Details
               key={`${topic}-sidebar-menu-problems`}
               label={
-                <div className="w-full">
-                  <div className="flex items-center justify-between w-full mb-2">
-                    <div className="flex items-center gap-2">
-                      {topicIcons[topic] || <FaCode className="w-4 h-4" />}
-                      <span className="text-base font-bold">{topic}</span>
+                <div className="w-full py-1">
+                  <div className="flex items-center justify-between w-full mb-2.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-base-200/80 flex items-center justify-center">
+                        {topicIcons[topic] || <FaCode className="w-4 h-4 text-primary" />}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold leading-tight">{topic}</span>
+                        <span className="text-xs text-base-content/60">
+                          {problemCount} problem{problemCount !== 1 ? 's' : ''}
+                        </span>
+                      </div>
                     </div>
                     <div className="flex gap-2">
-                      {solvedCount > 0 && (
-                        <span className="badge badge-success badge-sm">
+                      {solvedCount > 0 && solvedCount === problemCount && (
+                        <span className="badge badge-success badge-sm gap-1 shadow-sm">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          {solvedCount}/{problemCount}
+                        </span>
+                      )}
+                      {solvedCount > 0 && solvedCount < problemCount && (
+                        <span className="badge badge-warning badge-sm shadow-sm">
                           {solvedCount}/{problemCount}
                         </span>
                       )}
                       {solvedCount === 0 && (
-                        <span className="badge badge-primary badge-sm">{problemCount}</span>
+                        <span className="badge badge-ghost badge-sm">{problemCount}</span>
                       )}
                     </div>
                   </div>
-                  {/* Progress bar */}
+                  {/* Enhanced Progress bar with label */}
                   {problemCount > 0 && (
-                    <div className="w-full bg-base-300 rounded-full h-1">
-                      <div
-                        className={`h-1 rounded-full transition-all duration-300 ${
-                          solvedCount === problemCount ? 'bg-success' : 'bg-primary'
-                        }`}
-                        style={{ width: `${progressPercentage}%` }}
-                      ></div>
+                    <div className="space-y-1">
+                      <div className="w-full bg-base-300/50 rounded-full h-1.5 shadow-inner overflow-hidden">
+                        <div
+                          className={`h-1.5 rounded-full transition-all duration-500 ease-out ${
+                            solvedCount === problemCount
+                              ? 'bg-gradient-to-r from-success to-success shadow-sm'
+                              : 'bg-gradient-to-r from-primary to-primary/70'
+                          }`}
+                          style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                      </div>
                     </div>
                   )}
                 </div>
               }
             >
-              {topicProblems.map((problem, index) => {
-                const isActive = pathname === `/problems/${problem.slug}`;
-                const isSolved = solvedProblemsMap[problem.id];
-                const diffColor = getDifficultyColor(problem.difficulty);
+              <div className="space-y-1 mt-2">
+                {topicProblems.map((problem, index) => {
+                  const isActive = pathname === `/problems/${problem.slug}`;
+                  const isSolved = solvedProblemsMap[problem.id];
+                  const diffColor = getDifficultyColor(problem.difficulty);
 
-                return (
-                  <Menu.Item key={`${problem.slug}-menu-item`}>
-                    <Link
-                      className={`text-sm font-normal flex items-center gap-2 hover:bg-base-200 rounded-lg px-2 py-2 transition-all ${
-                        isActive ? 'bg-primary text-primary-content shadow-md' : ''
-                      }`}
-                      href={`/problems/${problem.slug}`}
-                      key={problem.slug}
-                      title={problem.title}
-                    >
-                      {isSolved ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          className="inline-block w-4 h-4 stroke-success flex-shrink-0"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                      ) : (
-                        <FaCode className="flex-shrink-0 opacity-50" size={14} />
-                      )}
-                      <span className="flex-1 truncate">{problem.title}</span>
-                      <div className="flex items-center gap-1">
-                        {problem.difficulty && (
-                          <span className={`text-xs font-semibold ${diffColor}`}>
-                            {problem.difficulty[0]}
+                  // Difficulty badge config
+                  const difficultyBadge = problem.difficulty ? {
+                    Easy: { color: 'badge-success', text: 'Easy' },
+                    Medium: { color: 'badge-warning', text: 'Med' },
+                    Hard: { color: 'badge-error', text: 'Hard' }
+                  }[problem.difficulty] : null;
+
+                  return (
+                    <Menu.Item key={`${problem.slug}-menu-item`}>
+                      <Link
+                        className={`group text-sm font-normal flex items-center gap-2.5 rounded-lg px-3 py-2.5 transition-all duration-200 ${
+                          isActive
+                            ? 'bg-primary text-primary-content shadow-lg scale-[1.02]'
+                            : 'hover:bg-base-200/80 hover:shadow-sm hover:scale-[1.01]'
+                        }`}
+                        href={`/problems/${problem.slug}`}
+                        key={problem.slug}
+                        title={problem.title}
+                      >
+                        {/* Status Icon */}
+                        <div className="flex-shrink-0">
+                          {isSolved ? (
+                            <div className="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                className="w-3.5 h-3.5 stroke-success stroke-[3]"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path>
+                              </svg>
+                            </div>
+                          ) : (
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              isActive ? 'border-primary-content/50' : 'border-base-content/20'
+                            }`}>
+                              <div className={`w-2 h-2 rounded-full ${
+                                isActive ? 'bg-primary-content/30' : ''
+                              }`}></div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Problem Title */}
+                        <span className={`flex-1 truncate ${
+                          isActive ? 'font-semibold' : 'font-normal'
+                        } ${!isSolved && !isActive ? 'text-base-content/90' : ''}`}>
+                          {problem.title}
+                        </span>
+
+                        {/* Metadata */}
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          {/* Difficulty Badge */}
+                          {difficultyBadge && (
+                            <span className={`badge ${difficultyBadge.color} badge-xs font-semibold ${
+                              isActive ? 'badge-outline' : ''
+                            }`}>
+                              {difficultyBadge.text}
+                            </span>
+                          )}
+                          {/* Problem Number */}
+                          <span className={`text-xs font-mono ${
+                            isActive ? 'text-primary-content/60' : 'text-base-content/40'
+                          }`}>
+                            #{index + 1}
                           </span>
-                        )}
-                        <span className="badge badge-ghost badge-xs">{index + 1}</span>
-                      </div>
-                    </Link>
-                  </Menu.Item>
-                );
-              })}
+                        </div>
+                      </Link>
+                    </Menu.Item>
+                  );
+                })}
+              </div>
             </Menu.Details>
           );
         })}
       </Menu>
 
-      {/* No results message */}
+      {/* No results message - Enhanced */}
       {searchQuery && filteredTopics.length === 0 && (
-        <div className="text-center py-8 text-base-content/50">
-          <FaSearch className="w-8 h-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">No problems found</p>
-          <p className="text-xs">Try a different search term</p>
+        <div className="card bg-base-200/50 border border-dashed border-base-content/20">
+          <div className="card-body items-center text-center py-12">
+            <div className="w-16 h-16 rounded-full bg-base-300/50 flex items-center justify-center mb-4">
+              <FaSearch className="w-7 h-7 text-base-content/30" />
+            </div>
+            <h3 className="text-base font-semibold text-base-content mb-1">No problems found</h3>
+            <p className="text-xs text-base-content/60 max-w-[200px]">
+              Try searching with different keywords or browse all topics
+            </p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="btn btn-sm btn-ghost mt-4"
+            >
+              Clear search
+            </button>
+          </div>
         </div>
       )}
     </div>
