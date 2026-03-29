@@ -1,5 +1,6 @@
 import { updateUserProblemCode } from "@/app/api/userproblems/handlers";
 import { UpdateUserCode } from "./definitions";
+import { executeCode } from "./executeCode";
 
 export const handleUpdateUserCode = async ({
   email,
@@ -12,47 +13,14 @@ export const handleUpdateUserCode = async ({
 }
 
 export const handleSubmitCode = async (code: string) => {
-  try {
-    const response = await fetch("https://emkc.org/api/v2/piston/execute", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "language": "javascript",
-        "version": "18.15.0",
-        "aliases": [
-            "node-javascript",
-            "node-js",
-            "javascript",
-            "js"
-        ],
-        "runtime": "node",
-        "files": [
-        {
-          "name": "index.js",
-          "content": code,
-        },
-      ],
-      "compile_memory_limit": -1,
-      "run_memory_limit": -1,
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const respData = await response.json();
-    return respData;
-  } catch (error) {
-    console.error('Code execution error:', error);
-    return {
-      run: {
-        output: `Error executing code: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`
-      }
-    };
-  }
+  const result = await executeCode(code);
+  return {
+    run: {
+      output: result.error
+        ? `${result.output}\n${result.error}`.trim()
+        : result.output,
+    },
+  };
 };
 
 export interface TestResult {
